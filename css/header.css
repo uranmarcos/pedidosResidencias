@@ -1,0 +1,97 @@
+.rowHeader{
+    border-bottom: solid 5px rgb(124, 69, 153);
+    width:100%;
+    margin:auto;
+    height:18vh
+}
+img{
+    margin:0;
+    /* height: 20vh; */
+    max-width: 200px !important;
+}
+.logoInicioHeader:hover{
+    cursor: pointer;
+}
+
+.menuBurguer{
+    display: flex;
+    z-index: 5;
+
+    flex-direction: column;
+    height: auto;
+    width: 200px;
+    position: absolute;
+    top: 15vh;
+    right:10px;
+    min-width: 200px;
+    /* margin: auto;
+    padding: auto; */
+    background-color: rgb(124, 69, 153);
+}
+.boxUser{
+    border: solid 1px rgb(124, 69, 153);
+    width: 200px;
+    height: 12vh;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    color: rgb(124, 69, 153);
+    font-weight: bolder;
+    text-align: center;
+    position: relative;
+}
+.burguerButton{
+    width: 200px;
+    margin: auto;
+    text-transform: uppercase;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    background-color: white;
+    color:rgb(124, 69, 153);
+    outline: none;
+    border-radius: 5px;
+    border: solid 1px rgb(124, 69, 153);
+}
+.burguerButton:hover{
+    background-color: rgb(124, 69, 153);
+    color: white;
+    cursor: pointer;
+
+}
+.logoInicioHeader{
+    background-image: url("../img/si.jpg");
+    height:16vh;
+    background-size: 10vh;
+    background-repeat: no-repeat;
+    background-position: left;  
+}
+.mitadHeader{
+    height: auto;;
+}
+.hide{
+    display: none;
+}
+.iconoBurguer{
+    background-color:rgb(124, 69, 153) !important;
+    color:white;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+.iconoBurguer:hover{
+    background-color: white !important;
+    cursor: pointer;
+    color: rgb(124, 69, 153);
+    border: solid 1px rgb(124, 69, 153);
+}
+
+
+
+@media (max-width: 767px) {
+    /* .textoBoxUser{
+       display: none;
+    } */
+ 
+}
+

@@ -1,43 +1,214 @@
-.container{
+main{
     display:flex;
     align-items: center;
+    justify-content: center;
     min-height: 100vh;
     padding:20px;
+    color:rgb(124, 69, 153);
 }
-.cajaForm{
-    width:100%;
+.container{
+    border:rgb(124, 69, 153) solid 1px;
+    border-radius: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 90vh;
+}
+section{
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 img{
-    margin:auto !important;
     width:70% !important;
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+.centrarTexto{
+    text-align: center !important;
+}
+.row{
+    margin:auto;
+    width: 100%;
+}
+form{
+    width: 100%;
+    margin:0;
+    padding:0 !important;
 }
 .rowForm{
     display: flex;
     justify-content: center;
+    width:80%;
+    margin: 0 auto;
 }
 .textoLabel{
-    color: purple;
+    color: rgb(124, 69, 153);
     font-size:18px;
 }
 .inputLabel{
-    height:30px;
-    border: solid 1px purple;
+    height:40px;
+    border: solid 1px rgb(124, 69, 153);
     border-radius: 7px;
-    margin-bottom:10px;
+    outline: none;
+}
+.inputContrasenia{
+    width: 90%;
+}
+.inputRecupero{
+    height:30px;
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 7px;
+    outline: none;
 }
 .botonSubmit{
-    background-color: purple;
+    background-color: rgb(124, 69, 153);
     color:white;
-    border: solid 1px purple;
+    border: solid 1px rgb(124, 69, 153);
     border-radius: 7px;
     outline: none;
     height:40px;
+    margin-top: 20px;
 }
 .botonSubmit:hover{
-    font-size:18px;
+    background-color: white;
+    color:rgb(124, 69, 153);
+    font-weight: bolder;
+    border: solid 1px rgb(124, 69, 153);
 }
 .mensajeError{
     color: red;
+    height: 20px;
     font-size: 12px;
+    text-align: left;
+}
+.recuperar{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    text-align:center;
+}
+.recuperar:hover{
+    font-weight: bolder;
+}
+.eyeButton {
+    height: 40px !important;
+    width:10%;
+    padding: 0;
+    color: rgb(124, 69, 153);    
+}
+.eyeButton:hover{
+    cursor: pointer;
+}
+.contenedorSvgEye{
+    display: flex;
+    width: 100%;
+    height: 100%;;
+    align-items: center;
+    justify-content: center;
+}
+
+.contenedorForm{
+    position:relative;
+}
+.cierreMensaje{
+    height: 10%;
+}
+.cajaMensaje{
+    height: 90%;
+}
+.boxError{
+    position: absolute;
+    top:0;
+    height: 100%;;
+    z-index: 2;
+    border-radius: 10px;
+    background-color: rgb(124, 69, 153)
+}
+.boxMensajeError{
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+.cajaMensaje{
+    display: flex;
+    flex-direction: column;
     text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.cierreMensaje{
+    text-align: right;
+}
+.cierreMensaje:hover{
+    cursor: pointer;
+}
+button{
+    background-color: rgb(124, 69, 153);
+    border-radius: 5px;
+    height: 30px;
+    font-size: 16px;
+    color:white;
+    line-height: 20px;
+    border: solid 1px white;
+    outline: none;
+}
+button:hover{
+    cursor: pointer;
+}
+button:active{
+    border: solid 1px rgb(124, 69, 153) !important;
+    outline: none !important;
+}
+
+
+/* MODAL RESET PASSWORD */
+.botonCancelar{
+    background-color: rgb(236, 130, 130) !important;
+    color: white !important;
+    line-height: 20px;
+    height: 40px;
+    width:auto !important;
+}
+.botonCancelar:hover {
+    background-color: white !important;
+    color: rgb(236, 130, 130) !important;
+    border: solid 1px rgb(236, 130, 130) !important;
+}
+.boton{
+    background-color: rgb(124, 69, 153) !important;
+    color: white !important;
+    line-height: 20px;
+    height: 40px;
+    min-width: 100px;
+    border: solid 1px rgb(124, 69, 153) !important;
+    width:auto !important;
+    border-radius: 5px;
+    outline: none;
+}
+.boton:hover {
+    background-color: white !important;
+    color: rgb(124, 69, 153) !important;
+    border: solid 1px rgb(124, 69, 153) !important;
+}
+.boton:active{
+    border: solid 1px rgb(124, 69, 153) !important;
+    outline: none !important;
+}
+.inputReset{
+    width: 80%;
+    height: 40px;
+    margin: 10px auto;
+    outline: none;
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 10px;
+    text-align: center;
+
 }

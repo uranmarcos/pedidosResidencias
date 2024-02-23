@@ -1,0 +1,202 @@
+/*
+TO DO
+    1.- MOVER ESTILOS HEADER A OTRO ARCHIVO
+    2.- REVISAR COLORES
+*/
+/*  HEADER   */
+.header{
+    height: 20vh ;
+}
+.logoFull{
+    height: 15vh;
+    display: flex;
+    justify-self: center;
+    /* //margin: auto!important; */
+    position: left;
+}
+
+
+/* NAV  */
+.navegador{
+    background-color: rgb(124, 69, 153);
+    color: white;
+    height: 6vh;
+    text-transform: uppercase;
+}
+.navegadorResponsive{
+    background-color: rgb(124, 69, 153);
+    color: white;
+    height: 6vh;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 6vh;
+}
+.nav-item{
+    height: 6vh;
+}
+.nav-link{
+    text-transform: uppercase;
+    text-decoration: none;
+    color: white !important;
+    height: 6vh;
+    text-align: center;
+}
+.nav-link:hover{
+   
+    font-weight: bolder;
+    border-bottom: solid 3px white;
+}
+.spinnerReenviar{
+    max-height: 20px;
+    max-width: 20px;
+}
+
+/* NAVEGADOR SECUNDARIO   */
+.submenu{
+    margin-top: 10px;
+}
+
+/* CLASES PARA DINAMISMO */
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+.botonAdmin{
+    max-width: 90px;;
+}
+/* 
+.menuBurguer{
+   position:absolute;
+    width:100%;
+    margin:0;
+    height:75vh;
+
+    background-color: white;
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 10px;
+    z-index:5;
+} */
+.asideButton{
+    width: 100%;
+    height: 50px;
+    line-height: 45px;
+    margin: 10px 0;
+    background-color: rgb(124, 69, 153);
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    text-transform: uppercase;
+    z-index: 5;
+    outline: none !important;
+}
+.asideButton:hover{
+    color: rgb(124, 69, 153);
+    background-color: white;
+}
+.contenedorMenuBurguer{
+    display: flex;
+    height: 75vh;
+    flex-direction: column;
+    align-content: space-around!important;
+}
+.icono{
+    display: flex;
+    width: auto;
+    margin: auto 0;
+    align-items: center!important;
+    justify-content:flex-start !important;
+    
+}
+.nameButtonAside{
+    width: auto;
+}
+
+
+
+/*  CLASES COMPARTIDAS   */
+.centrarTexto{
+    text-align: center;
+}
+
+
+.colBuscador{
+    display:flex;
+    flex-direction: row;
+    margin-left:10px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+
+
+/* FILTROS */
+.botonFiltro{
+    display:flex !important;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(124, 69, 153);
+    color:white;
+    height: 25px;
+    border-radius: 5px;
+    padding:0 !important;
+    height: 30px;
+    width: 30px !important;
+    border: solid 1px rgb(124, 69, 153);
+}
+.botonFiltro:hover{
+    cursor: pointer;
+    background-color: white;
+    color:rgb(124, 69, 153);
+    border: solid 1px rgb(124, 69, 153);
+}
+
+.buttonLogOut{
+    color: white;
+    background-color:rgb(124, 69, 153);
+    height: 100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width:110px;
+    border: none;
+    outline: none !important;
+}
+
+
+
+.rowFiltro{
+    padding:10px;
+}
+.violeta {
+    color: rgb(124, 69, 153)
+}
+#validacion{
+    border: solid 1px black;
+    text-align:center;
+}
+.headerResponsive{
+    display: none;
+}
+.rowHeader{
+    width:100% !important;
+}
+.headerNormal {
+    display: block;
+}
+
+@media (max-width: 767px) {
+    .headerFull{
+        display: none !important;
+    }
+    .headerResponsive{
+        display: block;
+    }
+    .headerNormal {
+        display: none;
+    }
+ 
+}

@@ -1,0 +1,313 @@
+
+.main{
+    margin:auto;
+    padding-bottom: 20px;;
+}
+.subMenuInicio{
+    width: 100%;
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.contenedorPrincipal{
+    min-height: 70vh;
+    height: 100%;
+}
+.titleSection{
+    color: rgb(124, 69, 153);
+    font-size:18px;
+    padding:0 !important; 
+    margin-top: 20px;
+    text-transform: uppercase;
+    border-bottom: solid 1px rgb(124, 69, 153);
+}
+.botonSubmenu{
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 10px;
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    text-transform: uppercase;
+    color:rgb(124, 69, 153);
+    font-weight: bolder;
+}
+.botonSubmenu:hover{
+    background-color:rgb(124, 69, 153);
+    color:white;
+    cursor: pointer;
+}
+#textareaOtros{
+    width: 100%;
+    margin: auto;;
+}
+.icono{
+    margin: auto;
+}
+.rowSubMenuInicio{
+    display: flex;
+    align-items: center;
+    display: flex;
+    align-items: center;
+   
+    width: 100%;
+  
+    margin: 0 !important;;
+}
+
+.cajaInternaBloque{
+    padding:20px 0;
+    width: 90%;
+    margin: auto !important;
+}
+
+
+.textarea{
+    width:80%;
+    height:100px;
+    margin:auto;
+}
+
+
+/* //BLOQUE */
+.bloque{
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 10px;
+    padding:15px;
+    margin-top: 30px;
+    width:100%;
+    font-size: 16px;
+    color: rgb(124, 69, 153);
+    margin: 20px 0;
+    margin-bottom: 20px;;
+}
+.columnaBloque{
+    display: flex;
+    flex-flow: column wrap;
+    text-align: left;
+}
+label{
+    margin-top:8px;
+    margin-bottom: 4px !important;;
+}
+.subtitle{
+    color: rgb(124, 69, 153);
+    font-size:18px;
+    text-transform: uppercase;
+    padding-left: 5px;
+}
+.pointer:hover{
+    cursor: pointer;
+}
+.grey{
+    color: grey
+}
+
+
+
+
+
+/* BOTONES  */
+/*  CLASES BOTONES  */
+.boton{
+    background-color: rgb(124, 69, 153) !important;
+    color: white !important;
+    line-height: 30px;
+    height: 40px;
+    min-width: 100px;
+    border: solid 1px rgb(124, 69, 153) !important;
+    width:auto !important;
+    border-radius: 5px;
+    outline: none;
+}
+.boton:hover {
+    background-color: white !important;
+    color: rgb(124, 69, 153) !important;
+    border: solid 1px rgb(124, 69, 153) !important;
+}
+.boton:active{
+    border: solid 1px rgb(124, 69, 153) !important;
+    outline: none !important;
+}
+.btnVerPedido{
+    color: rgb(124, 69, 153) !important;
+}
+.btnVerPedido:hover{
+    background-color: rgb(124, 69, 153);
+    color:white !important;
+}
+.botonLimpiar{
+    background-color: rgb(236, 130, 130) !important;
+    color: white !important;
+    line-height: 30px;
+    height: 30px;
+    margin:auto;
+    padding: 0 10 !important;
+    width:auto !important; 
+}
+.botonCancelar{
+    background-color: rgb(236, 130, 130) !important;
+    color: white !important;
+    line-height: 30px;
+    height: 40px;
+    width:auto !important;
+}
+.botonCancelar:hover {
+    background-color: white !important;
+    color: rgb(236, 130, 130) !important;
+    border: solid 1px rgb(236, 130, 130) !important;
+}
+.eyeButton {
+    height: 35px !important;
+    color: rgb(124, 69, 153);
+    line-height: 30px;
+}
+.eyeButton:hover{
+    cursor: pointer;
+}
+.btnReenviar{
+    border-radius: 5px !important;
+    padding:0 !important;
+    border: solid 1px  rgb(236, 130, 130) !important;
+    color:  rgb(236, 130, 130) !important;
+    padding: 5px !important;
+}
+.btnReenviarCircle{
+    border-radius: 5px !important;
+    padding:0 !important;
+    width: 100px;
+    border: solid 1px  rgb(124, 69, 153) !important;
+    color:  rgb(124, 69, 153) !important;
+    padding: 5px !important;
+}
+.botonEnviado:hover{
+    cursor:default !important;
+}
+#btnCircleVerPedido{
+    color: rgb(124, 69, 153);
+    height: 100%;;
+}
+.botonQuitarFiltro{
+    background-color: rgb(236, 130, 130);
+    color:white;
+    height: 25px;
+    border-radius: 5px;
+    padding:0 !important;
+    height: 30px;
+    width: 100px;
+    border: solid 1px rgb(236, 130, 130);
+}
+select, input{
+    height: 40px !important;
+    border-radius: 5px;
+    padding-left: 5px;;
+    border: solid 1px rgb(124, 69, 153);;
+}
+input{
+    outline: none;
+}
+.tdp{
+    height: 40px;
+    line-height: 40px;
+}
+.botonQuitarFiltro:hover{
+    cursor: pointer;
+    background-color: white;
+    color:rgb(124, 69, 153);
+    border: solid 1px rgb(124, 69, 153);
+}
+.buttonSort{
+    background-color: white !important;
+    border: none;
+    outline: none !important;
+}
+.buttonSort:hover{
+    color: rgb(124, 69, 153) !important;
+}
+.trashButton{
+    display:flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    color: rgb(236, 130, 130);
+    height: 25px;
+    border-radius: 5px;
+    padding:0 !important;
+}
+.trashButton:hover{
+    cursor: pointer;
+}
+.editButton{
+    display:flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    color:rgb(124, 69, 153);
+    height: 25px;
+    border-radius: 5px;
+    margin: 0 !important;
+    padding:0 !important;
+}
+.editButton:hover{
+    cursor: pointer;
+}
+
+
+
+.modalConfirmacion{
+    position: absolute;
+    top: 0 !important;
+    margin: auto;
+    width: 100%;
+    height: 70vh;
+}
+
+
+
+/*  GENERALES  */
+.errorValidacion{
+    font-size: 10px;
+    color: red;
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+.centrarTexto{
+    text-align: center;
+}
+.inputForm{
+    border-radius: 5px;
+    outline: none;
+    height: 35px;
+    border: solid 1px rgb(124, 69, 153);
+}
+.black{
+    color: black;
+}
+.green{
+    color: rgb(10, 172, 5);
+}
+
+.danger {
+    color: rgb(236, 130, 130);
+}
+.red{
+    color: rgb(189, 18, 18);
+}
+.purple{
+    color: rgb(124, 69, 153);
+}
+select{
+    outline: none;
+}
+.dataSede{
+    padding-bottom: 15px;
+    display: flex;
+    align-self: center;
+}
+
