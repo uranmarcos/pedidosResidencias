@@ -1,72 +1,327 @@
 <?php
 session_start();
-require("funciones/pdo.php");
-if($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "general"){
-    echo "<script> window.location.href='inicio.php' </script>";
-}
+// $rol = "usuario";
+// if (!$_SESSION["login"]) {
+//     header("Location: index.html");
+// }
+
+// if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
+//     header("Location: home.php");
+// }
+
+// if ($_SESSION["rol"] == "admin" ) {
+//     $rol = "admin";
+// }
+// if ($_SESSION["rol"] == "superAdmin" ) {
+//     $rol = "superAdmin";
+// }
+// if(time() - $_SESSION['login_time'] >= 1000){
+//     session_destroy(); // destroy session.
+//     header("Location: index.html");
+//     die(); 
+// } else {        
+//    $_SESSION['login_time'] = time();
+// }
 ?>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>Pedidos Sí</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.8">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-        <link href="css/master2.css" rel="stylesheet">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SI PEDIDOS</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        <link href="css/home.css" rel="stylesheet"> 
+        <link href="css/notificacion.css" rel="stylesheet"> 
+        <!-- <link href="css/modal.css" rel="stylesheet"> 
+        <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
     </head>
     <body>
-        <div class="contenedorPrincipal">
-            <div class="header">
-                <?php require("componentes/header.php")?>
-            </div>
-            <div class="col-md-11 main">
+        <div id="app">
+            <?php require("componentes/header.html")?>
+            
+            
+            <div class="container containerMenu">
+                
+                <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
-                    <div class="titleSection">
-                        <span class="pointer" onclick="redirect('inicio')">Inicio</span> -<span class="grey"> Admin </span>
+                    <div class="breadcrumb">
+                        <span class="pointer mx-2" @click="irAHome()">Inicio</span>  -  <span class="mx-2 grey"> Admin </span>
                     </div>
                 </div>
-                <div class="subMenuInicio">
-                    <div class="row rowSubMenuInicio d-flex justify-content-around">
-                        <div class="col-12 col-sm-4 mt-2 mt-sm-0 mb-2 mb-sm-0 botonSubmenu" onclick="redirect('adminSedes')" onmouseout="outBoton('spanSedes', 'iconoSedes')" onmouseover="overBoton('spanSedes', 'iconoSedes')">
-                            <span id="spanSedes">
-                                Sedes  
-                            </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" id="iconoSedes" fill="currentColor" class="bi icono hide bi-house-door-fill" viewBox="0 0 16 16">
-                                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
-                            </svg>
-                        </div>
-                        <div class="col-12 col-sm-4 mt-sm-0 mb-2 mb-sm-0 botonSubmenu" onclick="redirect('adminUsuarios')"  onmouseout="outBoton('spanUsuarios', 'iconoUsuarios')" onmouseover="overBoton('spanUsuarios', 'iconoUsuarios')">
-                            <span id="spanUsuarios">
-                                Usuarios   
-                            </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" id="iconoUsuarios" height="50" fill="currentColor" class="bi icono hide bi-person-fill" viewBox="0 0 16 16">
-                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                            </svg>
+                <!-- END BREADCRUMB -->
+
+                <!-- START OPCIONES -->
+                <div class="col-12 p-0 contenedorOpciones mt-6">
+                    <button class="opciones" :class="seleccion == 'residencias' ? 'selected' : ''" @click="cargar('residencias')">
+                        Residencias
+                    </button>
+                    
+                    <button class="opciones" :class="seleccion == 'categorias' ? 'selected' : ''" @click="cargar('categorias')">
+                        Categorias
+                    </button>
+                    
+                    <button class="opciones" :class="seleccion == 'articulos' ? 'selected' : ''" @click="cargar('articulos')">
+                        Articulos
+                    </button>
+
+                    <button class="opciones" :class="seleccion == 'pedidos' ? 'selected' : ''" @click="cargar('pedidos')">
+                        Pedidos
+                    </button>
+                </div>
+                <!-- END OPCIONES -->
+
+                <!-- START TABLA -->
+                <div class="col-12" v-if="seleccion">
+                    <!-- START COMPONENTE LOADING BUSCANDO pedidos -->
+                    <div class="contenedorLoading" v-if="buscando">
+                        <div class="loading">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="row rowSubMenuInicio d-flex justify-content-around">
-                        <div class="col-12 col-sm-4 mb-2 mb-sm-0  botonSubmenu" onclick="redirect('adminCategorias')" onmouseout="outBoton('spanCategorias', 'iconoCategorias')" onmouseover="overBoton('spanCategorias', 'iconoCategorias')">
-                            <span id="spanCategorias">
-                                Categorias   
+                    <!-- END COMPONENTE LOADING BUSCANDO pedidos -->
+                        
+                    <!-- START TABLA -->
+                    <div v-else>
+                        <div v-if="datos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
+                            <span class="title">LISTADO DE {{seleccion.toUpperCase()}}</span>
+                            <table class="table">
+                                <thead>
+                                    <tr class="trHead">
+                                        <th scope="col" v-for="columna in columnas">{{columna}}</th>
+                                        <!--
+                                        <th scope="col">Ver</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <div>
+                                        <tr v-for="dato in datos">
+                                            <div v-if="seleccion == 'residencias'">
+                                                <td v-if="seleccion == 'residencias'">{{dato.id}}</td>
+                                                <td v-if="seleccion == 'residencias'">{{dato.provincia}} - {{dato.localidad}}</td>
+                                                <!-- <td v-if="seleccion == 'residencias'">{{dato.localidad}}</td> -->
+                                                <td v-if="seleccion == 'residencias'">{{dato.usuario}}</td>
+                                                <td v-if="seleccion == 'residencias'">{{dato.pass}}</td>
+                                            </div>
+                                            <div v-if="seleccion == 'categorias'">
+                                                <td v-if="seleccion == 'categorias'">{{dato.id}}</td>
+                                                <td v-if="seleccion == 'categorias'">{{dato.descripcion.toUpperCase()}}</td>
+                                            </div>
+                                            <div v-if="seleccion == 'articulos'">
+                                                <td v-if="seleccion == 'articulos'">{{dato.id}}</td>
+                                                <td v-if="seleccion == 'articulos'">{{dato.categoria.toUpperCase()}}</td>
+                                                <td v-if="seleccion == 'articulos'">{{dato.descripcion.toUpperCase()}}</td>
+                                            </div>
+                                            <div v-if="seleccion == 'pedidos'">
+                                                <td v-if="seleccion == 'pedidos'">{{dato.id}}</td>
+                                                <td v-if="seleccion == 'pedidos'">{{dato.residencia.toUpperCase()}}</td>
+                                                <td v-if="seleccion == 'pedidos'">{{dato.voluntario.toUpperCase()}}</td>
+                                                <td v-if="seleccion == 'pedidos'">{{dato.fecha}}</td>
+                                            </div>
+                                        </tr>
+                                    </div>
+                                </tbody>
+                            </table>
+                        </div> 
+                        <div class="contenedorTabla" v-else>         
+                            <span class="sinResultados">
+                                NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
                             </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" id="iconoCategorias" height="50" fill="currentColor" class="bi icono hide bi-diagram-3-fill" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5v-1zm-6 8A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5v-1zm6 0A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5v-1zm6 0a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1z"/>
-                            </svg>
-                        </div>
-                        <div class="col-12 col-sm-4 mt-sm-0 mb-2 mb-sm-0 botonSubmenu" onclick="redirect('adminArticulos')"  onmouseout="outBoton('spanArticulos', 'iconoArticulos')" onmouseover="overBoton('spanArticulos', 'iconoArticulos')">
-                            <span id="spanArticulos">
-                                Articulos   
-                            </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" id="iconoArticulos" height="50" fill="currentColor" class="bi icono hide bi-cart-fill" viewBox="0 0 16 16">
-                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                            </svg>
-                        </div>
-                    </div>   
+                        </div>       
+                    <!-- END TABLA -->
+                    </div>
                 </div>
+                <!-- END TABLA -->
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>          
-        <script type="text/javascript"  src="js/funcionesCompartidas.js"></script> 
+
+
+        <style>
+            .containerMenu{
+                min-height: 85vh;
+                margin: auto;
+                display: flexbox;
+                align-items: center;
+                color: rgb(94, 93, 93);
+            }
+            .contenedorOpciones{
+                display: flex;
+                justify-content: space-between;
+            }
+            .opciones{
+                flex-direction: column;
+                border: solid 1px purple;
+                border-radius: 10px;
+                color: purple;
+                text-transform: uppercase;
+                text-align: center;
+                width: 150px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .opciones:hover{
+                cursor: pointer;
+            }    
+            .breadcrumb{
+                color: rgb(124, 69, 153);
+                font-size:1em;
+                padding:0 !important; 
+                margin-top: 16px;
+                text-transform: uppercase;
+                border-bottom: solid 1px rgb(124, 69, 153);
+            }
+            button{
+                background-color: white;
+                color: rgb(124, 69, 153);
+                width: auto;
+                text-transform: uppercase;
+                height: 40px;
+                border: solid 1px rgb(124, 69, 153);
+                border-radius: 10px;
+            }
+            button:hover{
+                background-color: rgb(124, 69, 153);
+                color: white;
+            }
+            .title{
+                font-size: 16px;
+                padding-left: 0px;
+                margin: 12px 0 5px;
+                color: rgb(124, 69, 153);;
+            }
+        </style>
+        <style scoped>
+            .ir-arriba {
+                background-color: #7C4599;;
+                width: 35px;
+                height: 35px;
+                font-size:20px;
+                border-radius: 50%;
+                color:#fff;
+                cursor:pointer;
+                position: fixed;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                bottom:20px;
+                right:20%;
+            }   
+            .contenedorPlanficaciones{
+                width: 100%;
+                margin:10px auto;
+            }
+            #mitoast{
+                z-index:60;
+            }
+            .sinResultados{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px 10px 20px;
+                text-align: center;
+            }
+            .contenedorTabla{
+                color: rgb(124, 69, 153);
+                border: solid 1px rgb(124, 69, 153);
+                border-radius: 10px;
+                padding: 10xp;
+                margin-top: 16px;
+                width: 100%;
+            }    
+            .table{
+                font-size: 14px;
+                text-align: center
+            }
+            tr{
+                border: solid 1px lightgrey;
+            }
+            .selected{
+                font-weight: bolder;
+            }
+        </style>
+        <script>
+            var app = new Vue({
+                el: "#app",
+                components: {                
+                },
+                data: {
+                    seleccion: null,
+                    buscando: false,
+                    datos: [],
+                    columnas: [],
+                    scroll: false,
+                    tituloToast: null,
+                    textoToast: null
+                },
+                mounted () {
+                },
+                beforeUpdate(){
+                    window.onscroll = function (){
+                        // Obtenemos la posicion del scroll en pantall
+                        var scroll = document.documentElement.scrollTop || document.body.scrollTop;
+                    }
+                },
+                methods:{
+                    cargar (opcion) {
+                        this.seleccion = opcion;
+                        this.getDatos(opcion);
+                    },
+                    getDatos(opcion) {
+                        this.buscando = true;
+                        let formdata = new FormData();
+                        formdata.append("opcion", opcion);
+                        axios.post("funciones/admin.php?accion=getDatos", formdata)
+                        .then(function(response){ 
+                            app.buscando = false;
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                if (response.data.pedidos != false) {
+                                    app.datos = response.data.pedidos;
+                                    app.armarTabla();
+                                } else {
+                                    app.datos = []
+                                }
+                            }
+                        });
+                    },
+                    armarTabla () {
+                        switch (this.seleccion) {
+                            case 'residencias':
+                                this.columnas = ['ID', 'SEDE', 'USUARIO', 'PASSWORD']
+                            break;
+                            
+                            case 'categorias':
+                                this.columnas = ['ID', 'DESCRIPCION']
+                                break;
+                            
+                            case 'articulos':
+                                this.columnas = ['ID', 'CATEGORIA', 'ARTICULO']
+                                break;
+                                
+                            case 'pedidos':
+                                this.columnas = ['ID', 'RESIDENCIA', 'VOLUNTARIO', 'FECHA']
+                                break;
+
+                            default:
+                                break;
+                        }
+                    },
+                }
+            })
+        </script>
     </body>
 </html>
