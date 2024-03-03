@@ -170,7 +170,7 @@ session_start();
                                 window.location.href = 'adminArticulos.php';    
                                 break; 
                             case "pedidos":
-                                window.location.href = 'pedidos.php';    
+                                window.location.href = 'home.php';    
                                 break; 
                             default:
                                 break;

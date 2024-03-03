@@ -1,379 +1,412 @@
 <?php
 session_start();
-require("funciones/pdo.php");
-require("funciones/adminArticulos.php");
-if($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "general"){
-    echo "<script> window.location.href='inicio.php' </script>";
-}
+// $rol = "usuario";
+// if (!$_SESSION["login"]) {
+//     header("Location: index.html");
+// }
+
+// if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
+//     header("Location: home.php");
+// }
+
+// if ($_SESSION["rol"] == "admin" ) {
+//     $rol = "admin";
+// }
+// if ($_SESSION["rol"] == "superAdmin" ) {
+//     $rol = "superAdmin";
+// }
+// if(time() - $_SESSION['login_time'] >= 1000){
+//     session_destroy(); // destroy session.
+//     header("Location: index.html");
+//     die(); 
+// } else {        
+//    $_SESSION['login_time'] = time();
+// }
 ?>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>Pedidos Sí</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.8">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-        <link href="css/master2.css" rel="stylesheet">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SI PEDIDOS</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        <link href="css/home.css" rel="stylesheet"> 
+        <link href="css/modal.css" rel="stylesheet"> 
+        <link href="css/notificacion.css" rel="stylesheet"> 
+        <!-- <link href="css/modal.css" rel="stylesheet"> 
+        <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
     </head>
     <body>
-        <div class="contenedorPrincipal">
-            <div class="header">
-                <?php require("componentes/header.php")?>
-            </div>
-            <div class="col-md-11 main">
+        <div id="app">
+            <?php require("componentes/header.html")?>
+            
+            
+            <div class="container containerMenu">
+                
+                <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
-                    <div class="titleSection">
-                        <span class="pointer" onclick="redirect('inicio')">Inicio</span> -<span class="pointer" onclick="redirect('admin')"> Admin </span> - <span class="grey"> Admin ARTICULOS</span>
+                    <div class="breadcrumb">
+                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Articulos </span>
                     </div>
                 </div>
+                <!-- END BREADCRUMB -->
 
-                <!--    START BOX LISTADO ARTICULOS    -->
-                <div class="bloque">
-                    <div class="alert alert-danger centrarTexto <?php echo $alertError ?>" id="alertErrorConexion" role="alert" >
-                        <?php echo $mensajeAlertError ?>
+                <!-- START OPCIONES -->
+                <div class="col-12 p-0 contenedorOpciones mt-6">
+                    <button class="opciones" @click="irA('residencias')">
+                        Residencias
+                    </button>
+                    
+                    <button class="opciones" @click="irA('categorias')">
+                        Categorias
+                    </button>
+                    
+                    <button class="opciones selected" @click="irA('articulos')">
+                        Articulos
+                    </button>
+
+                    <button class="opciones" @click="irA('pedidos')">
+                        Pedidos
+                    </button>
+                </div>
+                <!-- END OPCIONES -->
+
+               
+                <!-- START COMPONENTE LOADING BUSCANDO pedidos -->
+                <div class="contenedorLoading" v-if="buscando">
+                    <div class="loading">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only"></span>
+                        </div>
                     </div>
-                    <div class="alert alert-success centrarTexto <?php echo $alertConfirmacion ?>" id="alertConfirmacion" role="alert">
-                        <?php echo $mensajeAlertConfirmacion ?>
+                </div>
+                <!-- END COMPONENTE LOADING BUSCANDO pedidos -->
+                        
+                <!-- START TABLA -->
+                <div v-else class="mt-6">
+                    <div class="tituloTabla">
+                        <span class="title">LISTADO DE ARTICULOS</span>
+                        <span
+                            class="btnCrear"
+                            @click = "crear('crear')"
+                        >
+                            CREAR
+                        </span>
                     </div>
-                    <div class="contenedorSeccion contenedorModal">
-                        <form name="form2" method="POST" action="adminUsuarios.php">
-                            <div class="d-flex anchoTotal MB-2 row">
-                                <div class="subtitle col-6">
-                                    Articulos Disponibles
-                                </div>
-                                <div class="col-6 d-flex align-items-end justify-content-end">
-                                    <button type="button" class="btn boton" data-toggle="modal" data-target="#pruebaModal">
-                                        Nuevo Articulo
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- START TABLA CON LISTA DE ARTICULOS -->
-                            <div class="table-responsive">
-                                <table class="table <?php echo $hayDatos ?>">
-                                    <div class="row bg-grey d-flex align-items-center p-0 mt-2 mb-2 justify-content-around" style="width:100%">
-                                        <div class="col-11 col-sm-5 col-md-4">
-                                            <div class="row rowFiltro">
-                                                <input type="textarea" autocomplete="off" class="col-12" placeholder="Buscar por producto" onkeyup="filtrar()" name="buscadorProducto" id="buscadorProducto">
+                    <div v-if="datos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
+                        <table class="table">
+                            <thead>
+                                <tr class="trHead">
+                                    <th scope="col" v-for="columna in columnas">{{columna}}</th>
+                                    <!--
+                                    <th scope="col">Ver</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <div>
+                                    <tr v-for="dato in datos">
+                                        <div>
+                                            <div>
+                                                <td>{{dato.id}}</td>
+                                                <td>{{dato.categoria.toUpperCase()}}</td>
+                                                <td>{{dato.descripcion.toUpperCase()}}</td>
                                             </div>
-                                        </div>    
-                                        <div class="col-11 col-sm-5 col-md-4">
-                                            <div class="row rowFiltro">
-                                                <select style="height:30px" class="col-12" onchange="filtrar()" name="categoria" id="selectCategoria">
-                                                    <option value="todos">Todas las categorias</opcion>
-                                                        <?php foreach($categorias as $categoria){ ?>
-                                                            <option value="<?php echo $categoria['descripcion'] ?>" ><?php echo $categoria["descripcion"]?></opcion>
-                                                        <?php } ?>
-                                                    </select>  
-                                                </div>
-                                            </div> 
-                                            <div class="col-12 col-md-2 mb-2 hide mb-md-0" id="boxBotonFiltro">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <button type="submit" class="botonQuitarFiltro" name="reiniciarPedido" onclick="quitarFiltros()" class="editButton botonReiniciar">
-                                                        Quitar
-                                                    </button>
-                                                </div>
-                                            </div> 
                                         </div>
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="hide">#</th>
-                                                <th scope="col" style="width:50%">Descripcion</th>
-                                                <th scope="col" style="width:10%; text-align:center">Medida</th>
-                                                <th scope="col" style="width:10%; text-align:center">Categoria</th>
-                                                <th scope="col" style="width:100px; text-align:center">Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach($articulos as $articulo){ ?>
-                                                <tr name="rowTable">
-                                                    <td class="hide"><?php echo $articulo["id"] ?></td>
-                                                    <td class="productos">
-                                                        <div id="producto<?php echo $posicion = array_search($articulo, $articulos)?>">
-                                                            <?php echo $articulo["descripcion"] ?>
-                                                        </div>    
-                                                    </td>
-                                                    <td style="text-align: center"><?php echo $articulo["medida"] ?></td>
-                                                    <td class="categorias centrarTexto">
-                                                        <div id="categoria<?php echo $posicion = array_search($articulo, $articulos)?>">
-                                                            <?php echo $articulo["categoria"] ?>
-                                                        </div>
-                                                    </td>
-                                                    <td class="pl-0 pr-0" style="width:100px; text-align:center"> 
-                                                        <div class="row" style="width:90px; margin:auto;">
-                                                            <!-- BOTON TRASH -->
-                                                            <div style="width:45px" onmouseover="overBotonAccion('btnTrash<?php echo $articulo['id']?>','btnTrashFill<?php echo $articulo['id']?>')" onmouseout="overBotonAccion('btnTrashFill<?php echo $articulo['id']?>', 'btnTrash<?php echo $articulo['id']?>')" name="trashButton<?php echo $articulo['id']?>" id="trashButton<?php echo $articulo['id']?>" class="trashButton" onclick="eliminarArticulo(<?php echo $articulo['id']?>, '<?php echo $articulo['descripcion'];?>')" data-bs-toggle="modal" data-bs-target="#modalEliminar">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" id="btnTrash<?php echo $articulo['id']?>" viewBox="0 0 16 16">
-                                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                                                </svg>    
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi hide bi-trash-fill" id="btnTrashFill<?php echo $articulo['id']?>" viewBox="0 0 16 16">
-                                                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                                                                </svg>
-                                                            </div>
-                                                            <!-- BOTON EDIT -->
-                                                            <div style="width:45px" class="editButton" id="editButton<?php echo $articulo['id']?>" onmouseover="overBotonAccion('btnPen<?php echo $articulo['id']?>','btnPenFill<?php echo $articulo['id']?>')" onmouseout="overBotonAccion('btnPenFill<?php echo $articulo['id']?>', 'btnPen<?php echo $articulo['id']?>')" onclick="cargarDatosEdicion('<?php echo $articulo['id']?>', '<?php echo $articulo['descripcion']?>', '<?php echo $articulo['idMedida']?>', '<?php echo $articulo['idCategoria']?>')" data-toggle="modal" data-target="#edicionModal">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" id="btnPen<?php echo $articulo['id']?>" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                                                                </svg>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" id="btnPenFill<?php echo $articulo['id']?>" class="bi hide bi-pencil-fill" viewBox="0 0 16 16">
-                                                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
-                                                                </svg> 
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            <?php } ?>   
-                                        </tbody>               
-                                </table>                            
-                            </div>
-                            <!-- END TABLA CON LISTA DE ARTICULOS -->
-                            <!-- START TABLA SIN DATOS -->
-                            <table class="table <?php echo $noHayDatos?>">
-                                <thead class="d-flex justify-content-center">
-                                    <tr>
-                                        <th scope="col" style="width:100%">NO SE ENCONTRARON DATOS</th>
-                                    </tr>
-                                </thead>
+                                            <!-- <div v-if="seleccion == 'categorias'">
+                                                <td v-if="seleccion == 'categorias'">{{dato.id}}</td>
+                                                <td v-if="seleccion == 'categorias'">{{dato.descripcion.toUpperCase()}}</td>
+                                            </div>
+                                            
+                                            <div v-if="seleccion == 'pedidos'">
+                                                <td v-if="seleccion == 'pedidos'">{{dato.id}}</td>
+                                                <td v-if="seleccion == 'pedidos'">{{dato.residencia.toUpperCase()}}</td>
+                                                <td v-if="seleccion == 'pedidos'">{{dato.voluntario.toUpperCase()}}</td>
+                                                <td v-if="seleccion == 'pedidos'">{{dato.fecha}}</td>
+                                            </div> -->
+                                        </tr>
+                                    </div>
+                                </tbody>
                             </table>
-                            <!-- END TABLA SIN DATOS -->
-                        </form>
+                        </div> 
+                        <div class="contenedorTabla" v-else>         
+                            <span class="sinResultados">
+                                NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
+                            </span>
+                        </div>       
+                    <!-- END TABLA -->
                     </div>
                 </div>
-                <!--    END BOX LISTADO USUARIOS    -->
+                <!-- END TABLA -->
 
-                <!-- START MODAL CONFIRMACION ELIMINACION ARTICULO -->                    
-                <form action="adminArticulos.php" method="POST">
-                    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <input type="text" hidden name="idArticuloEliminar" id="idArticuloEliminar"></input>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <!-- MODAL RESIDENCIA -->
+                <div v-if="modalResidencia">
+                    <div id="myModal" class="modal">
+                        <div class="modal-content p-0">
+                            <div class="modal-header  d-flex justify-content-center">
+                                <h5 class="modal-title" id="ModalLabel">
+                                    {{accionModal.toUpperCase}} RESIDENCIA
+                                </h5>
+                            </div>
+                            <div class="modal-body row d-flex justify-content-center">
+                                <div class="col-sm-12 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">Provincia(*)</label>
+                                        <select class="form-control verCategorias">
+                                            <option v-for="provincia in provincias">{{provincia}}</option>
+                                        </select>
+                                    </div>
+                                    <span class="errorLabel" v-if="errorProvincia">Campo requerido</span>
                                 </div>
-                                <div class="modal-body centrarTexto">
-                                    ¿Confirma que desea eliminar el articulo <b><span id="articuloAEliminar"></span></b>?
+
+                                <div class="col-sm-12 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                    <label for="nombre" class="labelCategoria">Provincia(*)</label>
+                                        <input class="inputCategoria" :disabled="confirmCategorias" @input="errorNuevaCategoria = false" v-model="nuevaCategoria">
+                                    </div>
+                                    <span class="errorLabel" v-if="errorResidencia">Campo requerido</span>
                                 </div>
-                                <div class="modal-footer d-flex justify-content-around">
-                                    <button type="button" class="btn botonCancelar" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" name="eliminarArticulo" id="btnEliminarArticulo" onclick="mostrarSpinner('btnEliminarArticulo', 'spinnerEliminarArticulo')" class="btn boton">Confirmar</button>
-                                    <button type="button" class="btnReenviarCircle hide" id="spinnerEliminarArticulo">
-                                        <div class="spinner-border spinnerReenviar" role="status">
+                                
+                            </div>
+
+                            <!-- <div class="modal-body row d-flex justify-content-center">
+                                <div class="col-sm-12 mt-3 d-flex justify-content-center">
+                                    ¿Desea eliminar {{perfil == 'biblioteca' ? 'el libro' : perfil == 'recursos' ? 'el recurso' : 'la planificación'}}
+                                </div>
+                                <div class="col-sm-12 mt-3 d-flex justify-content-center">
+                                    <b> {{objetoEliminable.nombre}}</b> ?    
+                                </div>                             
+                            </div> -->
+
+
+                            <!-- <div class="modal-footer d-flex justify-content-between">
+                                <button type="button" class="btn botonEliminar" @click="cancelarEliminar" >CANCELAR</button>
+                                
+                                <button type="button" @click="confirmarEliminar" class="botonGeneral" v-if="!eliminandoObjeto">
+                                    CONFIRMAR
+                                </button>
+
+                                <button 
+                                    class="botonGeneral"
+                                    v-if="eliminandoObjeto" 
+                                >
+                                    <div class="loading">
+                                        <div class="spinner-border" role="status">
                                             <span class="sr-only"></span>
                                         </div>
-                                    </button> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <!-- END MODAL CONFIRMACION ELIMINACION ARTICULO -->
+                                    </div>
+                                </button>
+                            </div> -->
 
-                <!----     START MODAL CREACION DE ARTICULO    ----->
-                <form name="formCreacion" method="POST" action="adminArticulos.php">
-                    <div class="modal fade" id="pruebaModal" tabindex="-1" role="dialog" aria-labelledby="pruebaModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title centrarTexto purple" id="pruebaModalLabel">CREACIÓN DE ARTICULO</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body" id="bodyModalCrear">
-                                    <div class="contenedorSeccion purple contenedorModal mb-4" id="boxEditarUsuario">        
-                                        <div class="row">
-                                            <div class="col-12 columna">
-                                                <button type="button" class="btn botonLimpiar" id="btnLimpiarFormCreacion" onclick="limpiarFormularioCreacion()">Limpiar Formulario</button>
-                                            </div>
-                                            <div class="col-12 columna">
-                                                <label> Descripción: </label>
-                                                <input maxlength="30" style="width:100%" id="descripcionCreacion" name="descripcionCreacion" autocomplete="off" onkeyup="validarDescripcionCreacion(value)">
-                                                <div class="hide errorValidacion" id="mensajeValidacionCreacion"></div>
-                                            </div>
-                                            <div class="col-12 columna">
-                                                <label class="labelForm"> Medida: </label>
-                                                <select id="medidaCreacion" style="width:100%; height:30px"  name="medidaCreacion">
-                                                <?php foreach($medidas as $medida){ ?>
-                                                        <option value="<?php echo $medida['id']?>"><?php echo $medida['descripcion']?></option>
-                                                    <?php } ?> 
-                                                </select>   
-                                            </div>
-                                            <div class="col-12 columna">
-                                                <label class="labelForm"> Categoria: </label>
-                                                <select id="categoriaCreacion" style="width:100%; height:30px" name="categoriaCreacion">
-                                                    <?php foreach($categorias as $categoria){ ?>
-                                                        <option value="<?php echo $categoria['id']?>"><?php echo $categoria['descripcion']?></option>
-                                                    <?php } ?>  
-                                                </select>   
-                                            </div>                
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="col-12" id="botonesModalCreacion">
-                                        <div class="d-flex align-items-center justify-content-around">
-                                            <button type="button" class="btn botonCancelar" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn boton" disabled id="btnCreacion" onclick="pedirConfirmacion('botonesModalCreacion', 'confirmacionCreacion', 'crear')">Confirmar</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-12  hide" id="confirmacionCreacion">
-                                        <div class="d-flex align-items-center mb-3 purple justify-content-around">
-                                            ¿Confirma la creación del articulo?
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-around">
-                                            <button type="button" class="btn botonCancelar" onclick="cancelarConfirmacion('confirmacionCreacion', 'botonesModalCreacion', 'crear')">Cancelar</button>
-                                            <button type="submit" name="crearArticulo" id="btnCrearArticulo" onclick="desbloquearFormularioCreacion(), mostrarSpinner('btnCrearArticulo','spinnerCrearArticulo')" class="btn boton">Confirmar</button>
-                                            <button type="button" class="btnReenviarCircle hide" id="spinnerCrearArticulo" >
-                                                <div class="spinner-border spinnerReenviar" role="status">
-                                                    <span class="sr-only"></span>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </form>
-                <!----     END MODAL CREACION DE ARTICULO    ----->
-
-                <!----     START MODAL EDICION DE ARTICULO    ----->
-                <form name="formEdicion" method="POST" action="adminArticulos.php">
-                    <div class="modal fade" id="edicionModal" tabindex="-1" role="dialog" aria-labelledby="edicionModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title centrarTexto purple" id="edicionModalLabel">EDICIÓN DE ARTICULO</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body" id="bodyModalCrear">
-                                    <div class="contenedorSeccion purple contenedorModal mb-4" id="boxEditarArticulo">        
-                                        <div class="row">
-                                            <!-- <div class="col-12 columna">
-                                                <button type="button" class="btn botonLimpiar" id="btnLimpiarFormEdicion" onclick="limpiarFormularioEdicion()">Limpiar Formulario</button>
-                                            </div> -->
-                                            <input id="idArticuloEdicion" name="idArticuloEdicion" class="hide">
-                                                
-                                            <div class="col-12 columna">
-                                                <label> Descripción: </label>
-                                                <input maxlength="30" style="width:100%" id="descripcionEdicion" name="descripcionEdicion" autocomplete="off" onkeyup="validarDescripcionEdicion(value)">
-                                                <div class="hide errorValidacion" id="mensajeValidacionEdicion"></div>
-                                            </div>
-                                            <div class="col-12 columna">
-                                                <label class="labelForm"> Medida: </label>
-                                                <select id="medidaEdicion" style="width:100%; height:30px" onchange="validarFormularioEdicion()" name="medidaEdicion">
-                                                <?php foreach($medidas as $medida){ ?>
-                                                        <option value="<?php echo $medida['id']?>"><?php echo $medida['descripcion']?></option>
-                                                    <?php } ?> 
-                                                </select>   
-                                            </div>
-                                            <div class="col-12 columna">
-                                                <label class="labelForm"> Categoria: </label>
-                                                <select id="categoriaEdicion" style="width:100%; height:30px" onchange="validarFormularioEdicion()" name="categoriaEdicion">
-                                                    <?php foreach($categorias as $categoria){ ?>
-                                                        <option value="<?php echo $categoria['id']?>"><?php echo $categoria['descripcion']?></option>
-                                                    <?php } ?>  
-                                                </select>   
-                                            </div>                
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="col-12" id="botonesModalEdicion">
-                                        <div class="d-flex align-items-center justify-content-around">
-                                            <button type="button" class="btn botonCancelar" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn boton" disabled id="btnEdicion" onclick="pedirConfirmacion('botonesModalEdicion', 'confirmacionEdicion', 'editar')">Confirmar</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-12  hide" id="confirmacionEdicion">
-                                        <div class="d-flex align-items-center mb-3 purple justify-content-around">
-                                            ¿Confirma la edición del articulo?
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-around">
-                                            <button type="button" class="btn botonCancelar" onclick="cancelarConfirmacion('confirmacionEdicion', 'botonesModalEdicion', 'editar')">Cancelar</button>
-                                            <button type="submit" name="editarArticulo" id="btnEditarArticulo" onclick="desbloquearFormularioEdicion(), mostrarSpinner('btnEditarArticulo','spinnerEditarArticulo')" class="btn boton">Confirmar</button>
-                                            <button type="button" class="btnReenviarCircle hide" id="spinnerEditarArticulo" >
-                                                <div class="spinner-border spinnerReenviar" role="status">
-                                                    <span class="sr-only"></span>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <!----     END MODAL EDICION DE USUARIO    ----->
+                </div>    
+                <!-- MODAL CATEGORIAS -->
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>          
-        <script type="text/javascript"  src="js/funcionesCompartidas.js"></script> 
-        <script type="text/javascript"  src="js/adminArticulos.js"></script> 
+
+
+        <style>
+            .containerMenu{
+                min-height: 85vh;
+                margin: auto;
+                display: flexbox;
+                align-items: center;
+                color: rgb(94, 93, 93);
+            }
+            .contenedorOpciones{
+                display: flex;
+                justify-content: space-between;
+            }
+            .opciones{
+                flex-direction: column;
+                border: solid 1px purple;
+                border-radius: 10px;
+                color: purple;
+                text-transform: uppercase;
+                text-align: center;
+                width: 150px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .opciones:hover{
+                cursor: pointer;
+            }    
+            .breadcrumb{
+                color: rgb(124, 69, 153);
+                font-size:1em;
+                padding:0 !important; 
+                margin-top: 16px;
+                text-transform: uppercase;
+                border-bottom: solid 1px rgb(124, 69, 153);
+            }
+            button{
+                background-color: white;
+                color: rgb(124, 69, 153);
+                width: auto;
+                text-transform: uppercase;
+                height: 40px;
+                border: solid 1px rgb(124, 69, 153);
+                border-radius: 10px;
+            }
+            button:hover{
+                background-color: rgb(124, 69, 153);
+                color: white;
+            }
+            .mt-6{
+                margin-top: 24px
+            }
+            .tituloTabla{
+                display: flex;
+                justify-content: space-between;
+            }
+            .title{
+                font-size: 16px;
+                padding-left: 0px;
+                color: rgb(124, 69, 153);;
+            }
+            .btnCrear{
+                border: solid 1px rgb(124, 69, 153);
+                padding: 0 12px;
+                border-radius: 5px;
+            }
+            .btnCrear:hover{
+                cursor: pointer;
+            }
+        </style>
+        <style scoped>
+            .ir-arriba {
+                background-color: #7C4599;;
+                width: 35px;
+                height: 35px;
+                font-size:20px;
+                border-radius: 50%;
+                color:#fff;
+                cursor:pointer;
+                position: fixed;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                bottom:20px;
+                right:20%;
+            }   
+            .contenedorPlanficaciones{
+                width: 100%;
+                margin:10px auto;
+            }
+            #mitoast{
+                z-index:60;
+            }
+            .sinResultados{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px 10px 20px;
+                text-align: center;
+            }
+            .contenedorTabla{
+                color: rgb(124, 69, 153);
+                border: solid 1px rgb(124, 69, 153);
+                border-radius: 10px;
+                padding: 10xp;
+                margin-top: 16px;
+                width: 100%;
+            }    
+            .table{
+                font-size: 14px;
+                text-align: center
+            }
+            tr{
+                border: solid 1px lightgrey;
+            }
+            .selected{
+                font-weight: bolder;
+            }
+        </style>
+        <script>
+            var app = new Vue({
+                el: "#app",
+                components: {                
+                },
+                data: {
+                    buscando: false,
+                    datos: [],
+                    columnas: ['ID', 'CATEGORIA', 'DESCRIPCION'],
+                    scroll: false,
+                    tituloToast: null,
+                    textoToast: null,
+                    modalResidencia: false,
+                    accionModal: null
+                },
+                mounted () {
+                    this.getDatos();
+                },
+                beforeUpdate(){
+                    window.onscroll = function (){
+                        // Obtenemos la posicion del scroll en pantall
+                        var scroll = document.documentElement.scrollTop || document.body.scrollTop;
+                    }
+                },
+                methods:{
+                    irA (destino) {
+                        switch (destino) {
+                            case "admin":
+                                window.location.href = 'admin.php';    
+                                break; 
+                            case "home":
+                                window.location.href = 'home.php';    
+                                break; 
+                            case "residencias":
+                                window.location.href = 'adminResidencias.php';    
+                                break; 
+                            case "categorias":
+                                window.location.href = 'adminCategorias.php';    
+                                break; 
+                            case "articulos":
+                                window.location.href = 'adminArticulos.php';    
+                                break; 
+                            case "pedidos":
+                                window.location.href = 'home.php';    
+                                break; 
+                            default:
+                                break;
+                        }
+                    },
+                    crear (accion) {
+                        this.modalResidencia = true;
+                        this.accionModal = accion;
+                    },
+                    getDatos() {
+                        this.buscando = true;
+                        let formdata = new FormData();
+                        formdata.append("opcion", 'articulos');
+                        axios.post("funciones/admin.php?accion=getDatos", formdata)
+                        .then(function(response){ 
+                            app.buscando = false;
+                            if (response.data.error) {
+                                app.mostrarToast("Error", response.data.mensaje);
+                            } else {
+                                if (response.data.pedidos != false) {
+                                    app.datos = response.data.pedidos;
+                                } else {
+                                    app.datos = []
+                                }
+                            }
+                        });
+                    }
+                }
+            })
+        </script>
     </body>
 </html>
-<script>
-if ( window.history.replaceState ) {
-    window.history.replaceState( null, null, window.location.href );
-}
-window.onload = function(){
-    let alertConfirmacion = document.getElementById("alertConfirmacion")
-    if (alertConfirmacion.classList.contains('show')) {
-        setTimeout(ocultarAlertConfirmacion, 5000)
-    }
-    let alertErrorConexion = document.getElementById("alertErrorConexion")
-    if (alertErrorConexion.classList.contains('show')) {
-        setTimeout(ocultarAlertError, 5000)
-    }
-}
-function validarDescripcionEdicion(value){
-    let boxMensajeArticuloExistente = document.getElementById("mensajeValidacionEdicion")
-    let btnEdicion = document.getElementById("btnEdicion")
-    btnEdicion.setAttribute("disabled", true)
-    let articulos = <?php  echo json_encode($articulos) ?>;
-    if(value.length >=3) {
-        let articulosExistentes = articulos.filter(element => element.descripcion.toLowerCase().includes(value.toLowerCase()))
-        let descripcionesArticulosExistentes = ""
-        articulosExistentes.forEach(function callback(value, index) {
-            descripcionesArticulosExistentes = descripcionesArticulosExistentes + value.descripcion + " "
-        })
-        if(articulosExistentes.length > 0) {
-            boxMensajeArticuloExistente.classList.remove("hide")
-            boxMensajeArticuloExistente.innerHTML = "Ya existen los siguientes articulos: " + descripcionesArticulosExistentes
-        }else{
-            btnEdicion.removeAttribute("disabled")
-            boxMensajeArticuloExistente.classList.add("hide")
-        }
-    } else {
-        boxMensajeArticuloExistente.classList.remove("hide")
-        boxMensajeArticuloExistente.innerHTML = "3 o mas caracteres"
-    }
-}
-function validarDescripcionCreacion(value){
-    let boxMensajeArticuloExistente = document.getElementById("mensajeValidacionCreacion")
-    let btnCreacion = document.getElementById("btnCreacion")
-    btnCreacion.setAttribute("disabled", true)
-    let articulos = <?php  echo json_encode($articulos) ?>;
-    if(value.length >=3) {
-        let articulosExistentes = articulos.filter(element => element.descripcion.toLowerCase().includes(value.toLowerCase()))
-        let descripcionesArticulosExistentes = ""
-        articulosExistentes.forEach(function callback(value, index) {
-            descripcionesArticulosExistentes = descripcionesArticulosExistentes + value.descripcion + " "
-        })
-        if(articulosExistentes.length > 0) {
-            boxMensajeArticuloExistente.classList.remove("hide")
-            boxMensajeArticuloExistente.innerHTML = "Ya existen los siguientes articulos: " + descripcionesArticulosExistentes
-        }else{
-            btnCreacion.removeAttribute("disabled")
-            boxMensajeArticuloExistente.classList.add("hide")
-        }
-    } else {
-        boxMensajeArticuloExistente.classList.remove("hide")
-        boxMensajeArticuloExistente.innerHTML = "3 o mas caracteres"
-    }
-}
-
-</script>

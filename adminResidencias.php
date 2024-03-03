@@ -62,67 +62,65 @@ session_start();
 
                 <!-- START OPCIONES -->
                 <div class="col-12 p-0 contenedorOpciones mt-6">
-                    <button class="opciones" :class="seleccion == 'residencias' ? 'selected' : ''" @click="irA('residencias')">
+                    <button class="opciones selected" @click="irA('residencias')">
                         Residencias
                     </button>
                     
-                    <button class="opciones" :class="seleccion == 'categorias' ? 'selected' : ''" @click="irA('categorias')">
+                    <button class="opciones" @click="irA('categorias')">
                         Categorias
                     </button>
                     
-                    <button class="opciones" :class="seleccion == 'articulos' ? 'selected' : ''" @click="irA('articulos')">
+                    <button class="opciones" @click="irA('articulos')">
                         Articulos
                     </button>
 
-                    <button class="opciones" :class="seleccion == 'pedidos' ? 'selected' : ''" @click="irA('pedidos')">
+                    <button class="opciones" @click="irA('pedidos')">
                         Pedidos
                     </button>
                 </div>
                 <!-- END OPCIONES -->
 
-                <!-- START TABLA -->
-                <div class="col-12" v-if="seleccion">
-                    <!-- START COMPONENTE LOADING BUSCANDO pedidos -->
-                    <div class="contenedorLoading" v-if="buscando">
-                        <div class="loading">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only"></span>
-                            </div>
+               
+                <!-- START COMPONENTE LOADING BUSCANDO pedidos -->
+                <div class="contenedorLoading" v-if="buscando">
+                    <div class="loading">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only"></span>
                         </div>
                     </div>
-                    <!-- END COMPONENTE LOADING BUSCANDO pedidos -->
+                </div>
+                <!-- END COMPONENTE LOADING BUSCANDO pedidos -->
                         
-                    <!-- START TABLA -->
-                    <div v-else class="mt-6">
-                        <div class="tituloTabla">
-                            <span class="title">LISTADO DE {{seleccion.toUpperCase()}}</span>
-                            <span
-                                class="btnCrear"
-                                @click = "crear('crear', seleccion)"
-                            >
-                                CREAR
-                            </span>
-                        </div>
-                        <div v-if="datos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
-                            <table class="table">
-                                <thead>
-                                    <tr class="trHead">
-                                        <th scope="col" v-for="columna in columnas">{{columna}}</th>
-                                        <!--
-                                        <th scope="col">Ver</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <div>
-                                        <tr v-for="dato in datos">
-                                            <div v-if="seleccion == 'residencias'">
-                                                <td v-if="seleccion == 'residencias'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'residencias'">{{dato.provincia}} - {{dato.localidad}}</td>
-                                                <!-- <td v-if="seleccion == 'residencias'">{{dato.localidad}}</td> -->
-                                                <td v-if="seleccion == 'residencias'">{{dato.usuario}}</td>
-                                                <td v-if="seleccion == 'residencias'">{{dato.pass}}</td>
-                                            </div>
-                                            <div v-if="seleccion == 'categorias'">
+                <!-- START TABLA -->
+                <div v-else class="mt-6">
+                    <div class="tituloTabla">
+                        <span class="title">LISTADO DE RESIDENCIAS</span>
+                        <span
+                            class="btnCrear"
+                            @click = "crear('crear')"
+                        >
+                            CREAR
+                        </span>
+                    </div>
+                    <div v-if="datos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
+                        <table class="table">
+                            <thead>
+                                <tr class="trHead">
+                                    <th scope="col" v-for="columna in columnas">{{columna}}</th>
+                                    <!--
+                                    <th scope="col">Ver</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <div>
+                                    <tr v-for="dato in datos">
+                                        <div>
+                                            <td>{{dato.id}}</td>
+                                            <td>{{dato.provincia}} - {{dato.localidad}}</td>
+                                            <td>{{dato.usuario}}</td>
+                                            <td>{{dato.pass}}</td>
+                                        </div>
+                                            <!-- <div v-if="seleccion == 'categorias'">
                                                 <td v-if="seleccion == 'categorias'">{{dato.id}}</td>
                                                 <td v-if="seleccion == 'categorias'">{{dato.descripcion.toUpperCase()}}</td>
                                             </div>
@@ -136,7 +134,7 @@ session_start();
                                                 <td v-if="seleccion == 'pedidos'">{{dato.residencia.toUpperCase()}}</td>
                                                 <td v-if="seleccion == 'pedidos'">{{dato.voluntario.toUpperCase()}}</td>
                                                 <td v-if="seleccion == 'pedidos'">{{dato.fecha}}</td>
-                                            </div>
+                                            </div> -->
                                         </tr>
                                     </div>
                                 </tbody>
@@ -345,10 +343,9 @@ session_start();
                 components: {                
                 },
                 data: {
-                    seleccion: null,
                     buscando: false,
                     datos: [],
-                    columnas: [],
+                    columnas: ['ID', 'SEDE', 'USUARIO', 'PASSWORD'],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,
@@ -356,7 +353,7 @@ session_start();
                     accionModal: null
                 },
                 mounted () {
-                    this.cargar('residencias');
+                    this.getDatos();
                 },
                 beforeUpdate(){
                     window.onscroll = function (){
@@ -383,7 +380,7 @@ session_start();
                                 window.location.href = 'adminArticulos.php';    
                                 break; 
                             case "pedidos":
-                                window.location.href = 'pedidos.php';    
+                                window.location.href = 'home.php';    
                                 break; 
                             default:
                                 break;
@@ -393,14 +390,10 @@ session_start();
                         this.modalResidencia = true;
                         this.accionModal = accion;
                     },
-                    cargar (opcion) {
-                        this.seleccion = opcion;
-                        this.getDatos(opcion);
-                    },
-                    getDatos(opcion) {
+                    getDatos() {
                         this.buscando = true;
                         let formdata = new FormData();
-                        formdata.append("opcion", opcion);
+                        formdata.append("opcion", 'residencias');
                         axios.post("funciones/admin.php?accion=getDatos", formdata)
                         .then(function(response){ 
                             app.buscando = false;
@@ -409,35 +402,12 @@ session_start();
                             } else {
                                 if (response.data.pedidos != false) {
                                     app.datos = response.data.pedidos;
-                                    app.armarTabla();
                                 } else {
                                     app.datos = []
                                 }
                             }
                         });
-                    },
-                    armarTabla () {
-                        switch (this.seleccion) {
-                            case 'residencias':
-                                this.columnas = ['ID', 'SEDE', 'USUARIO', 'PASSWORD']
-                            break;
-                            
-                            case 'categorias':
-                                this.columnas = ['ID', 'DESCRIPCION']
-                                break;
-                            
-                            case 'articulos':
-                                this.columnas = ['ID', 'CATEGORIA', 'ARTICULO']
-                                break;
-                                
-                            case 'pedidos':
-                                this.columnas = ['ID', 'RESIDENCIA', 'VOLUNTARIO', 'FECHA']
-                                break;
-
-                            default:
-                                break;
-                        }
-                    },
+                    }
                 }
             })
         </script>
