@@ -106,7 +106,12 @@ session_start();
                         <table class="table">
                             <thead>
                                 <tr class="trHead">
-                                    <th scope="col" v-for="columna in columnas">{{columna}}</th>
+                                    <th scope="col" v-for="columna in columnas">
+                                        {{columna}}
+                                        <button @click="ordenarTabla(columna)" v-if="columna != 'ID'">
+                                            ↑↓
+                                        </button>
+                                    </th>
                                     <!--
                                     <th scope="col">Ver</th> -->
                                 </tr>
@@ -215,6 +220,12 @@ session_start();
 
 
         <style>
+            th button {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                height: auto;
+            }
             .containerMenu{
                 min-height: 85vh;
                 margin: auto;
@@ -359,6 +370,34 @@ session_start();
                     }
                 },
                 methods:{
+                    estaOrdenadoAscendentemente(atributo) {
+                        for (let i = 1; i < this.datos.length; i++) {
+                            if (this.datos[i - 1][atributo.toLowerCase()] > this.datos[i][atributo.toLowerCase()]) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    },
+                    ordenarTabla(param) {
+                        const ordenAscendente = this.estaOrdenadoAscendentemente(param);
+                        if (ordenAscendente) {
+                            this.datos.sort((a, b) => {
+                                const valorA = a[param.toLowerCase()].toLowerCase();
+                                const valorB = b[param.toLowerCase()].toLowerCase();
+                                if (valorA < valorB) return 1;
+                                if (valorA > valorB) return -1;
+                                return 0;
+                            });
+                        } else { // Si no está ordenado de manera ascendente, ordenar de manera ascendente
+                            this.datos.sort((a, b) => {
+                                const valorA = a[param.toLowerCase()].toLowerCase();
+                                const valorB = b[param.toLowerCase()].toLowerCase();
+                                if (valorA < valorB) return -1;
+                                if (valorA > valorB) return 1;
+                                return 0;
+                            });
+                        }
+                    },
                     irA (destino) {
                         switch (destino) {
                             case "admin":

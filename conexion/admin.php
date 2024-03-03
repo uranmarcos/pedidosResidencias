@@ -24,6 +24,8 @@ class ApptivaDB {
                 $resultado = $this->conexion->query("SELECT a.id AS id, a.descripcion AS descripcion, c.descripcion AS categoria FROM articulos a INNER JOIN categorias c ON a.categoria = c.id ORDER BY c.descripcion, a.descripcion") or die();
             } else if ($opcion == 'pedidos') {
                 $resultado = $this->conexion->query("SELECT id, residencia, voluntario, fecha FROM pedidos") or die();
+            } else if ($opcion == 'residencias') {
+                $resultado = $this->conexion->query("SELECT id, CONCAT(provincia,' - ', localidad) as residencia, usuario, pass FROM residencias") or die();
             } else {
                 $resultado = $this->conexion->query("SELECT * FROM $opcion") or die();
             }

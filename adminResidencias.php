@@ -106,7 +106,12 @@ session_start();
                         <table class="table">
                             <thead>
                                 <tr class="trHead">
-                                    <th scope="col" v-for="columna in columnas">{{columna}}</th>
+                                    <th scope="col" v-for="columna in columnas">
+                                        {{columna}}
+                                        <button @click="ordenarTabla(columna)" v-if="columna != 'PASSWORD' && columna != 'ID'">
+                                            ↑↓
+                                        </button>
+                                    </th>
                                     <!--
                                     <th scope="col">Ver</th> -->
                                 </tr>
@@ -116,37 +121,21 @@ session_start();
                                     <tr v-for="dato in datos">
                                         <div>
                                             <td>{{dato.id}}</td>
-                                            <td>{{dato.provincia}} - {{dato.localidad}}</td>
+                                            <td>{{dato.residencia}}</td>
                                             <td>{{dato.usuario}}</td>
                                             <td>{{dato.pass}}</td>
                                         </div>
-                                            <!-- <div v-if="seleccion == 'categorias'">
-                                                <td v-if="seleccion == 'categorias'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'categorias'">{{dato.descripcion.toUpperCase()}}</td>
-                                            </div>
-                                            <div v-if="seleccion == 'articulos'">
-                                                <td v-if="seleccion == 'articulos'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'articulos'">{{dato.categoria.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'articulos'">{{dato.descripcion.toUpperCase()}}</td>
-                                            </div>
-                                            <div v-if="seleccion == 'pedidos'">
-                                                <td v-if="seleccion == 'pedidos'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.residencia.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.voluntario.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.fecha}}</td>
-                                            </div> -->
-                                        </tr>
-                                    </div>
-                                </tbody>
-                            </table>
-                        </div> 
-                        <div class="contenedorTabla" v-else>         
-                            <span class="sinResultados">
-                                NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
-                            </span>
-                        </div>       
+                                    </tr>
+                                </div>
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class="contenedorTabla" v-else>         
+                        <span class="sinResultados">
+                            NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
+                        </span>
+                    </div>       
                     <!-- END TABLA -->
-                    </div>
                 </div>
                 <!-- END TABLA -->
 
@@ -218,6 +207,12 @@ session_start();
 
 
         <style>
+            th button {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                height: auto;
+            }
             .containerMenu{
                 min-height: 85vh;
                 margin: auto;
@@ -345,7 +340,7 @@ session_start();
                 data: {
                     buscando: false,
                     datos: [],
-                    columnas: ['ID', 'SEDE', 'USUARIO', 'PASSWORD'],
+                    columnas: ['ID', 'RESIDENCIA', 'USUARIO', 'PASSWORD'],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,
@@ -362,6 +357,34 @@ session_start();
                     }
                 },
                 methods:{
+                    estaOrdenadoAscendentemente(atributo) {
+                        for (let i = 1; i < this.datos.length; i++) {
+                            if (this.datos[i - 1][atributo.toLowerCase()] > this.datos[i][atributo.toLowerCase()]) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    },
+                    ordenarTabla(param) {
+                        const ordenAscendente = this.estaOrdenadoAscendentemente(param);
+                        if (ordenAscendente) {
+                            this.datos.sort((a, b) => {
+                                const valorA = a[param.toLowerCase()].toLowerCase();
+                                const valorB = b[param.toLowerCase()].toLowerCase();
+                                if (valorA < valorB) return 1;
+                                if (valorA > valorB) return -1;
+                                return 0;
+                            });
+                        } else { // Si no está ordenado de manera ascendente, ordenar de manera ascendente
+                            this.datos.sort((a, b) => {
+                                const valorA = a[param.toLowerCase()].toLowerCase();
+                                const valorB = b[param.toLowerCase()].toLowerCase();
+                                if (valorA < valorB) return -1;
+                                if (valorA > valorB) return 1;
+                                return 0;
+                            });
+                        }
+                    },
                     irA (destino) {
                         switch (destino) {
                             case "admin":
