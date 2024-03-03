@@ -7,6 +7,13 @@
     /* justify-content: space-between; */
     align-items: center;
     border-bottom: rgb(124, 69, 153) 1px solid;
+    
+}
+.contenedorHeader{
+    display: flex;
+    justify-content: space-between;
+    max-width: 960px;;
+    
 }
 /* .imgHeader{
     border-radius: 50%;

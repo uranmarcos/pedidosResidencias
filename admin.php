@@ -40,6 +40,7 @@ session_start();
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
         <link href="css/home.css" rel="stylesheet"> 
+        <link href="css/modal.css" rel="stylesheet"> 
         <link href="css/notificacion.css" rel="stylesheet"> 
         <!-- <link href="css/modal.css" rel="stylesheet"> 
         <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
@@ -54,94 +55,30 @@ session_start();
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irAHome()">Inicio</span>  -  <span class="mx-2 grey"> Admin </span>
+                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="mx-2 grey"> Admin </span>
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
 
                 <!-- START OPCIONES -->
                 <div class="col-12 p-0 contenedorOpciones mt-6">
-                    <button class="opciones" :class="seleccion == 'residencias' ? 'selected' : ''" @click="cargar('residencias')">
+                    <button class="opciones" @click="irA('residencias')">
                         Residencias
                     </button>
                     
-                    <button class="opciones" :class="seleccion == 'categorias' ? 'selected' : ''" @click="cargar('categorias')">
+                    <button class="opciones" @click="irA('categorias')">
                         Categorias
                     </button>
                     
-                    <button class="opciones" :class="seleccion == 'articulos' ? 'selected' : ''" @click="cargar('articulos')">
+                    <button class="opciones" @click="irA('articulos')">
                         Articulos
                     </button>
 
-                    <button class="opciones" :class="seleccion == 'pedidos' ? 'selected' : ''" @click="cargar('pedidos')">
+                    <button class="opciones" @click="irA('pedidos')">
                         Pedidos
                     </button>
                 </div>
                 <!-- END OPCIONES -->
-
-                <!-- START TABLA -->
-                <div class="col-12" v-if="seleccion">
-                    <!-- START COMPONENTE LOADING BUSCANDO pedidos -->
-                    <div class="contenedorLoading" v-if="buscando">
-                        <div class="loading">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END COMPONENTE LOADING BUSCANDO pedidos -->
-                        
-                    <!-- START TABLA -->
-                    <div v-else>
-                        <div v-if="datos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
-                            <span class="title">LISTADO DE {{seleccion.toUpperCase()}}</span>
-                            <table class="table">
-                                <thead>
-                                    <tr class="trHead">
-                                        <th scope="col" v-for="columna in columnas">{{columna}}</th>
-                                        <!--
-                                        <th scope="col">Ver</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <div>
-                                        <tr v-for="dato in datos">
-                                            <div v-if="seleccion == 'residencias'">
-                                                <td v-if="seleccion == 'residencias'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'residencias'">{{dato.provincia}} - {{dato.localidad}}</td>
-                                                <!-- <td v-if="seleccion == 'residencias'">{{dato.localidad}}</td> -->
-                                                <td v-if="seleccion == 'residencias'">{{dato.usuario}}</td>
-                                                <td v-if="seleccion == 'residencias'">{{dato.pass}}</td>
-                                            </div>
-                                            <div v-if="seleccion == 'categorias'">
-                                                <td v-if="seleccion == 'categorias'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'categorias'">{{dato.descripcion.toUpperCase()}}</td>
-                                            </div>
-                                            <div v-if="seleccion == 'articulos'">
-                                                <td v-if="seleccion == 'articulos'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'articulos'">{{dato.categoria.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'articulos'">{{dato.descripcion.toUpperCase()}}</td>
-                                            </div>
-                                            <div v-if="seleccion == 'pedidos'">
-                                                <td v-if="seleccion == 'pedidos'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.residencia.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.voluntario.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.fecha}}</td>
-                                            </div>
-                                        </tr>
-                                    </div>
-                                </tbody>
-                            </table>
-                        </div> 
-                        <div class="contenedorTabla" v-else>         
-                            <span class="sinResultados">
-                                NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
-                            </span>
-                        </div>       
-                    <!-- END TABLA -->
-                    </div>
-                </div>
-                <!-- END TABLA -->
             </div>
         </div>
 
@@ -195,61 +132,8 @@ session_start();
                 background-color: rgb(124, 69, 153);
                 color: white;
             }
-            .title{
-                font-size: 16px;
-                padding-left: 0px;
-                margin: 12px 0 5px;
-                color: rgb(124, 69, 153);;
-            }
-        </style>
-        <style scoped>
-            .ir-arriba {
-                background-color: #7C4599;;
-                width: 35px;
-                height: 35px;
-                font-size:20px;
-                border-radius: 50%;
-                color:#fff;
-                cursor:pointer;
-                position: fixed;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                bottom:20px;
-                right:20%;
-            }   
-            .contenedorPlanficaciones{
-                width: 100%;
-                margin:10px auto;
-            }
-            #mitoast{
-                z-index:60;
-            }
-            .sinResultados{
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 20px 10px 20px;
-                text-align: center;
-            }
-            .contenedorTabla{
-                color: rgb(124, 69, 153);
-                border: solid 1px rgb(124, 69, 153);
-                border-radius: 10px;
-                padding: 10xp;
-                margin-top: 16px;
-                width: 100%;
-            }    
-            .table{
-                font-size: 14px;
-                text-align: center
-            }
-            tr{
-                border: solid 1px lightgrey;
-            }
-            .selected{
-                font-weight: bolder;
+            .mt-6{
+                margin-top: 24px
             }
         </style>
         <script>
@@ -258,13 +142,6 @@ session_start();
                 components: {                
                 },
                 data: {
-                    seleccion: null,
-                    buscando: false,
-                    datos: [],
-                    columnas: [],
-                    scroll: false,
-                    tituloToast: null,
-                    textoToast: null
                 },
                 mounted () {
                 },
@@ -275,51 +152,30 @@ session_start();
                     }
                 },
                 methods:{
-                    cargar (opcion) {
-                        this.seleccion = opcion;
-                        this.getDatos(opcion);
-                    },
-                    getDatos(opcion) {
-                        this.buscando = true;
-                        let formdata = new FormData();
-                        formdata.append("opcion", opcion);
-                        axios.post("funciones/admin.php?accion=getDatos", formdata)
-                        .then(function(response){ 
-                            app.buscando = false;
-                            if (response.data.error) {
-                                app.mostrarToast("Error", response.data.mensaje);
-                            } else {
-                                if (response.data.pedidos != false) {
-                                    app.datos = response.data.pedidos;
-                                    app.armarTabla();
-                                } else {
-                                    app.datos = []
-                                }
-                            }
-                        });
-                    },
-                    armarTabla () {
-                        switch (this.seleccion) {
-                            case 'residencias':
-                                this.columnas = ['ID', 'SEDE', 'USUARIO', 'PASSWORD']
-                            break;
-                            
-                            case 'categorias':
-                                this.columnas = ['ID', 'DESCRIPCION']
-                                break;
-                            
-                            case 'articulos':
-                                this.columnas = ['ID', 'CATEGORIA', 'ARTICULO']
-                                break;
-                                
-                            case 'pedidos':
-                                this.columnas = ['ID', 'RESIDENCIA', 'VOLUNTARIO', 'FECHA']
-                                break;
-
+                    irA (destino) {
+                        switch (destino) {
+                            case "admin":
+                                window.location.href = 'admin.php';    
+                                break; 
+                            case "home":
+                                window.location.href = 'home.php';    
+                                break; 
+                            case "residencias":
+                                window.location.href = 'adminResidencias.php';    
+                                break; 
+                            case "categorias":
+                                window.location.href = 'adminCategorias.php';    
+                                break; 
+                            case "articulos":
+                                window.location.href = 'adminArticulos.php';    
+                                break; 
+                            case "pedidos":
+                                window.location.href = 'pedidos.php';    
+                                break; 
                             default:
                                 break;
                         }
-                    },
+                    }
                 }
             })
         </script>
