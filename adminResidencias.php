@@ -41,6 +41,7 @@ session_start();
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
         <link href="css/home.css" rel="stylesheet"> 
         <link href="css/modal.css" rel="stylesheet"> 
+        <link href="css/admin.css" rel="stylesheet"> 
         <link href="css/notificacion.css" rel="stylesheet"> 
         <!-- <link href="css/modal.css" rel="stylesheet"> 
         <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
@@ -120,7 +121,7 @@ session_start();
                                 <div>
                                     <tr v-for="dato in datos">
                                         <div>
-                                            <td>{{dato.id}}</td>
+                                            <!-- <td>{{dato.id}}</td> -->
                                             <td>{{dato.residencia}}</td>
                                             <td>{{dato.usuario}}</td>
                                             <td>{{dato.pass}}</td>
@@ -139,34 +140,74 @@ session_start();
                 </div>
                 <!-- END TABLA -->
 
-                <!-- MODAL RESIDENCIA -->
-                <div v-if="modalResidencia">
+                <!-- START MODAL  -->
+                <div v-if="modal">
                     <div id="myModal" class="modal">
                         <div class="modal-content p-0">
                             <div class="modal-header  d-flex justify-content-center">
                                 <h5 class="modal-title" id="ModalLabel">
-                                    {{accionModal.toUpperCase}} RESIDENCIA
+                                    {{accion.toUpperCase()}} RESIDENCIA
                                 </h5>
                             </div>
-                            <div class="modal-body row d-flex justify-content-center">
+                            <div class="modal-body bodyModal row d-flex justify-content-center">
                                 <div class="col-sm-12 mt-3">
                                     <div class="row rowCategoria d-flex justify-space-around">
-                                        <label for="nombre" class="labelCategoria">Provincia(*)</label>
-                                        <select class="form-control verCategorias">
+                                        <label for="nombre" class="labelCategoria">
+                                            Provincia(*)
+                                            <span class="errorLabel" v-if="errorProvincia">Requerido</span>
+                                        </label>
+                                        <select class="form-control" v-model="residencia.provincia">
+                                            <option selected disabled>Seleccione...</option>
                                             <option v-for="provincia in provincias">{{provincia}}</option>
                                         </select>
                                     </div>
-                                    <span class="errorLabel" v-if="errorProvincia">Campo requerido</span>
                                 </div>
 
                                 <div class="col-sm-12 mt-3">
                                     <div class="row rowCategoria d-flex justify-space-around">
-                                    <label for="nombre" class="labelCategoria">Provincia(*)</label>
-                                        <input class="inputCategoria" :disabled="confirmCategorias" @input="errorNuevaCategoria = false" v-model="nuevaCategoria">
+                                        <label for="nombre" class="labelCategoria">
+                                            Localidad(*)
+                                            <span class="errorLabel" v-if="errorLocalidad">Requerido</span>
+                                        </label>
+                                        <input class="form-control" @input="errorProvincia = false" @keyup="crearUsuario(residencia.localidad)" v-model="residencia.localidad">
                                     </div>
-                                    <span class="errorLabel" v-if="errorResidencia">Campo requerido</span>
                                 </div>
                                 
+                                <div class="col-sm-12 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Usuario(*)
+                                            <span class="errorLabel" v-if="errorUsuario">Requerido</span>
+                                        </label>
+                                        <input class="form-control" v-model="residencia.usuario">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                    <label for="nombre" class="labelCategoria">Contraseña</label>
+                                        <input class="form-control" disabled v-model="residencia.password">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer d-flex justify-content-between">                                
+                                <button type="button" class="btn boton botonResponsive" @click="cancelar()" :disabled="confirmando">Cancelar</button>
+                                
+                                <button type="button" @click="confirmar()" class="btn boton botonResponsive" v-if="!confirmando">
+                                    Confirmar
+                                </button>
+
+                                <button 
+                                    class="btn boton"
+                                    v-if="confirmando" 
+                                >
+                                    <div class="confirmando">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </button>
                             </div>
 
                             <!-- <div class="modal-body row d-flex justify-content-center">
@@ -177,152 +218,28 @@ session_start();
                                     <b> {{objetoEliminable.nombre}}</b> ?    
                                 </div>                             
                             </div> -->
-
-
-                            <!-- <div class="modal-footer d-flex justify-content-between">
-                                <button type="button" class="btn botonEliminar" @click="cancelarEliminar" >CANCELAR</button>
-                                
-                                <button type="button" @click="confirmarEliminar" class="botonGeneral" v-if="!eliminandoObjeto">
-                                    CONFIRMAR
-                                </button>
-
-                                <button 
-                                    class="botonGeneral"
-                                    v-if="eliminandoObjeto" 
-                                >
-                                    <div class="loading">
-                                        <div class="spinner-border" role="status">
-                                            <span class="sr-only"></span>
-                                        </div>
-                                    </div>
-                                </button>
-                            </div> -->
-
                         </div>
                     </div>
                 </div>    
-                <!-- MODAL CATEGORIAS -->
+                <!-- END MODAL -->
+
+                <!-- NOTIFICACION -->
+                 <div role="alert" id="mitoast" aria-live="assertive" @mouseover="ocultarToast" aria-atomic="true" class="toast">
+                    <div class="toast-header">
+                        <!-- Nombre de la Aplicación -->
+                        <div class="row tituloToast" id="tituloToast">
+                            <strong class="mr-auto">{{tituloToast}}</strong>
+                        </div>
+                    </div>
+                    <div class="toast-content">
+                        <div class="row textoToast">
+                            <strong >{{textoToast}}</strong>
+                        </div>
+                    </div>
+                </div>
+                <!-- NOTIFICACION -->
             </div>
         </div>
-
-
-        <style>
-            th button {
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
-                height: auto;
-            }
-            .containerMenu{
-                min-height: 85vh;
-                margin: auto;
-                display: flexbox;
-                align-items: center;
-                color: rgb(94, 93, 93);
-            }
-            .contenedorOpciones{
-                width: 100%;
-                margin: auto;
-                display: flex;
-                justify-content: space-between;
-            }
-            .opciones{
-                border: none;
-                border-radius: 0;
-                border-bottom: solid 1px rgb(124, 69, 153);;
-                background-color: white;
-                color: rgb(124, 69, 153);;
-                text-transform: uppercase;
-                text-align: center;
-                height: 50px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .opciones:hover{
-                cursor: pointer;
-                border-bottom: solid 3px rgb(124, 69, 153);
-                font-weight: bolder;
-            }  
-            .breadcrumb{
-                color: rgb(124, 69, 153);
-                font-size:1em;
-                padding:0 !important; 
-                margin-top: 16px;
-                text-transform: uppercase;
-                border-bottom: solid 1px rgb(124, 69, 153);
-            }
-            .mt-6{
-                margin-top: 24px
-            }
-            .tituloTabla{
-                display: flex;
-                justify-content: space-between;
-            }
-            .title{
-                font-size: 16px;
-                padding-left: 0px;
-                color: rgb(124, 69, 153);;
-            }
-            .btnCrear{
-                border: solid 1px rgb(124, 69, 153);
-                padding: 0 12px;
-                border-radius: 5px;
-            }
-            .btnCrear:hover{
-                cursor: pointer;
-            }
-        </style>
-        <style scoped>
-            .ir-arriba {
-                background-color: #7C4599;;
-                width: 35px;
-                height: 35px;
-                font-size:20px;
-                border-radius: 50%;
-                color:#fff;
-                cursor:pointer;
-                position: fixed;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                bottom:20px;
-                right:20%;
-            }   
-            .contenedorPlanficaciones{
-                width: 100%;
-                margin:10px auto;
-            }
-            #mitoast{
-                z-index:60;
-            }
-            .sinResultados{
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 20px 10px 20px;
-                text-align: center;
-            }
-            .contenedorTabla{
-                color: rgb(124, 69, 153);
-                border: solid 1px rgb(124, 69, 153);
-                border-radius: 10px;
-                padding: 10xp;
-                margin-top: 16px;
-                width: 100%;
-            }    
-            .table{
-                font-size: 14px;
-                text-align: center
-            }
-            tr{
-                border: solid 1px lightgrey;
-            }
-            .selected{
-                font-weight: bolder;
-            }
-        </style>
         <script>
             var app = new Vue({
                 el: "#app",
@@ -331,12 +248,48 @@ session_start();
                 data: {
                     buscando: false,
                     datos: [],
-                    columnas: ['ID', 'RESIDENCIA', 'USUARIO', 'PASSWORD'],
+                    columnas: ['RESIDENCIA', 'USUARIO', 'PASSWORD'],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,
-                    modalResidencia: false,
-                    accionModal: null
+                    modal: false,
+                    accion: null,
+                    provincias: [
+                        "Buenos Aires",
+                        "CABA",
+                        "Catamarca",
+                        "Chaco",
+                        "Chubut",
+                        "Córdoba",
+                        "Corrientes",
+                        "Entre Ríos",
+                        "Formosa",
+                        "Jujuy",
+                        "La Pampa",
+                        "La Rioja",
+                        "Mendoza",
+                        "Misiones",
+                        "Neuquén",
+                        "Río Negro",
+                        "Salta",
+                        "San Juan",
+                        "San Luis",
+                        "Santa Cruz",
+                        "Santa Fe",
+                        "Santiago del Estero",
+                        "Tierra del Fuego",
+                        "Tucumán"
+                    ],
+                    errorProvincia: false,
+                    errorLocalidad: false,
+                    errorUsuario: false,
+                    residencia: {
+                        id: null,
+                        provincia: null,
+                        localidad: null,
+                        usuario: null
+                    },
+                    confirmando: false
                 },
                 mounted () {
                     this.getDatos();
@@ -348,6 +301,113 @@ session_start();
                     }
                 },
                 methods:{
+                    cancelar () {
+                        this.modal = false;
+                        this.residencia.id = null;
+                        this.residencia.provincia = null;
+                        this.residencia.localidad = null;
+                        this.residencia.usuario = null;
+                        this.residencia.password = null;
+                    },
+                    crearUsuario (param) {
+                        if (param) {
+                            const acentos = {
+                                'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
+                                'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
+                                'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
+                                'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U',
+                                'ä': 'a', 'ë': 'e', 'ï': 'i', 'ö': 'o', 'ü': 'u',
+                                'Ä': 'A', 'Ë': 'E', 'Ï': 'I', 'Ö': 'O', 'Ü': 'U',
+                            };
+
+                            // Primero, reemplazo los caracteres acentuados por su equivalente sin acento
+                            param = param.split('').map(letra => acentos[letra] || letra).join('');
+                            // Reemplazo caracteres especiales
+                            param = param.replace(/[^a-zA-Z]/g, "").toLowerCase().replaceAll(" ",'');;
+                            this.residencia.usuario = param + "@fundacionsi.org.ar";
+                            this.residencia.password = 30712506829;
+                        }
+                    },
+                    resetErrores () {
+                        this.errorProvincia = false;
+                        this.errorLocalidad = false;
+                        this.errorUsuario = false;
+                    },
+                    validarFormulario () {
+                        this.resetErrores();
+                        let validacion = true;
+                        if (!this.residencia.provincia) {
+                            this.errorProvincia = true;
+                            validacion = false;
+                        }
+                        if (!this.residencia.localidad || this.residencia.localidad.trim() == '') {
+                            this.errorLocalidad = true;
+                            validacion = false;
+                        }
+                        if (!this.residencia.usuario || this.residencia.usuario.trim() == '') {
+                            this.errorUsuario = true;
+                            validacion = false;
+                        }
+                        return validacion;
+                    },
+                    mostrarToast(titulo, texto) {
+                        app.tituloToast = titulo;
+                        app.textoToast = texto;
+                        var toast = document.getElementById("mitoast");
+                        var tituloToast = document.getElementById("tituloToast");
+                        toast.classList.remove("toast");
+                        toast.classList.add("mostrar");
+                        setTimeout(function(){ toast.classList.toggle("mostrar"); }, 10000);
+                        if (titulo == 'Éxito') {
+                            toast.classList.remove("bordeError");
+                            toast.classList.add("bordeExito");
+                            tituloToast.className = "exito";
+                        } else {
+                            toast.classList.remove("bordeExito");
+                            toast.classList.add("bordeError");
+                            tituloToast.className = "errorModal";
+                        }
+                    },
+                    ocultarToast() {
+                        this.tituloToast = "";
+                        this.textoToast = "";
+                        var toast = document.getElementById("mitoast");
+                        toast.classList.remove("mostrar");
+                        toast.classList.add("toast");
+                    },
+                    confirmar () {
+                        if (this.validarFormulario()) {
+                            app.confirmando = true;
+                            let formdata = new FormData();
+                            formdata.append("tipo", "libro");
+                            formdata.append("provincia", app.residencia.provincia);
+                            formdata.append("localidad", app.residencia.localidad);
+                            formdata.append("usuario", app.residencia.usuario);
+                            formdata.append("pass", app.residencia.password);
+                            axios.post("funciones/admin.php?accion=crearResidencia", formdata)
+                            .then(function(response){
+                                if (response.data.error) {
+                                    app.mostrarToast("Error", response.data.mensaje);
+                                } else {
+                                app.mostrarToast("Éxito", response.data.mensaje);
+                                app.modal = false;
+                                app.resetResidencia();
+                                app.getDatos();
+                            }
+                            app.confirmando = false;
+                            }).catch( error => {
+                                app.confirmando = false;
+                                app.mostrarToast("Error", "No se pudo crear la residencia");
+                            })
+                        }
+                    },
+                    resetResidencia () {
+                        this.residencia.id = null;
+                        this.residencia.provincia = null;
+                        this.residencia.localidad = null;
+                        this.residencia.usuario = null;
+                        this.residencia.password = null;
+                    },
                     estaOrdenadoAscendentemente(atributo) {
                         for (let i = 1; i < this.datos.length; i++) {
                             if (this.datos[i - 1][atributo.toLowerCase()] > this.datos[i][atributo.toLowerCase()]) {
@@ -401,8 +461,8 @@ session_start();
                         }
                     },
                     crear (accion) {
-                        this.modalResidencia = true;
-                        this.accionModal = accion;
+                        this.modal = true;
+                        this.accion = accion;
                     },
                     getDatos() {
                         this.buscando = true;

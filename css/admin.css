@@ -1,0 +1,116 @@
+.bodyModal{
+    margin: 0 12px 12px;
+}
+th button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    height: auto;
+}
+.containerMenu{
+    min-height: 85vh;
+    margin: auto;
+    display: flexbox;
+    align-items: center;
+    color: rgb(94, 93, 93);
+}
+.contenedorOpciones{
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+.opciones{
+    border: none;
+    border-radius: 0;
+    border-bottom: solid 1px rgb(124, 69, 153);;
+    background-color: white;
+    color: rgb(124, 69, 153);;
+    text-transform: uppercase;
+    text-align: center;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.opciones:hover{
+    cursor: pointer;
+    border-bottom: solid 3px rgb(124, 69, 153);
+    font-weight: bolder;
+}  
+.breadcrumb{
+    color: rgb(124, 69, 153);
+    font-size:1em;
+    padding:0 !important; 
+    margin-top: 16px;
+    text-transform: uppercase;
+    border-bottom: solid 1px rgb(124, 69, 153);
+}
+.mt-6{
+    margin-top: 24px
+}
+.tituloTabla{
+    display: flex;
+    justify-content: space-between;
+}
+.title{
+    font-size: 16px;
+    padding-left: 0px;
+    color: rgb(124, 69, 153);;
+}
+.btnCrear{
+    border: solid 1px rgb(124, 69, 153);
+    padding: 0 12px;
+    border-radius: 5px;
+}
+.btnCrear:hover{
+    cursor: pointer;
+}
+.ir-arriba {
+    background-color: #7C4599;;
+    width: 35px;
+    height: 35px;
+    font-size:20px;
+    border-radius: 50%;
+    color:#fff;
+    cursor:pointer;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom:20px;
+    right:20%;
+}   
+.contenedorPlanficaciones{
+    width: 100%;
+    margin:10px auto;
+}
+#mitoast{
+    z-index:60;
+}
+.sinResultados{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px 20px;
+    text-align: center;
+}
+.contenedorTabla{
+    color: rgb(124, 69, 153);
+    border: solid 1px rgb(124, 69, 153);
+    border-radius: 10px;
+    padding: 10xp;
+    margin-top: 16px;
+    width: 100%;
+}    
+.table{
+    font-size: 14px;
+    text-align: center
+}
+tr{
+    border: solid 1px lightgrey;
+}
+.selected{
+    font-weight: bolder;
+}

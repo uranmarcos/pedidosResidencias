@@ -27,7 +27,25 @@
             } 
 
         break;
+
+        case 'crearResidencia':
+            $provincia = $_POST["provincia"];
+            $localidad = $_POST["localidad"];
+            $usuario = $_POST["usuario"];
+            $pass = $_POST['pass'];
+            $data = "'" . $provincia . "', '" . $localidad . "', '" . $usuario . "', '" . $pass . "'";
+            
+            $u = $user -> insertar("residencias", $data);
         
+            if ($u) {
+                $res["error"] = false;
+                $res["mensaje"] = "La residencia se guardó correctamente";
+            } else {
+                $res["mensaje"] = "No se pudo guardar la residencia. Intente nuevamente";
+                $res["error"] = true;
+            } 
+
+        break;        
     }
     echo json_encode($res);
 

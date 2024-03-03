@@ -36,6 +36,29 @@ class ApptivaDB {
         }
     }
 
+    public function insertar($tabla, $datos) {
+        try {
+            $resultado = $this->conexion->query("INSERT INTO $tabla VALUES(null, $datos)") or die();
+            //return true;
+
+            if ($resultado === false) {
+                return false; // Error al ejecutar la sentencia SQL
+            }
+    
+            $idInsertado = $this->conexion->insert_id;
+    
+            if ($idInsertado > 0) {
+                return $idInsertado; // Devuelve el ID de la instancia insertada
+            } else {
+                return false; // No se insertó ninguna instancia o no se obtuvo el ID
+            }
+        } catch (\Throwable $th) {
+            // return $th;
+            return false;
+        }
+    }
+
+
 }
 
 ?>
