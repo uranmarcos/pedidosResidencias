@@ -61,20 +61,20 @@ session_start();
                 <!-- END BREADCRUMB -->
 
                 <!-- START OPCIONES -->
-                <div class="col-12 p-0 contenedorOpciones mt-6">
-                    <button class="opciones" @click="irA('residencias')">
+                <div class="row p-0 contenedorOpciones mt-6">
+                    <button class="col-3 opciones" @click="irA('residencias')">
                         Residencias
                     </button>
                     
-                    <button class="opciones" @click="irA('categorias')">
+                    <button class="col-3 opciones" @click="irA('categorias')">
                         Categorias
                     </button>
                     
-                    <button class="opciones" @click="irA('articulos')">
+                    <button class="col-3 opciones" @click="irA('articulos')">
                         Articulos
                     </button>
 
-                    <button class="opciones" @click="irA('pedidos')">
+                    <button class="col-3 opciones" @click="irA('pedidos')">
                         Pedidos
                     </button>
                 </div>
@@ -92,17 +92,19 @@ session_start();
                 color: rgb(94, 93, 93);
             }
             .contenedorOpciones{
+                width: 100%;
+                margin: auto;
                 display: flex;
                 justify-content: space-between;
             }
             .opciones{
-                flex-direction: column;
-                border: solid 1px purple;
-                border-radius: 10px;
-                color: purple;
+                border: none;
+                border-radius: 0;
+                border-bottom: solid 1px rgb(124, 69, 153);;
+                background-color: white;
+                color: rgb(124, 69, 153);;
                 text-transform: uppercase;
                 text-align: center;
-                width: 150px;
                 height: 50px;
                 display: flex;
                 justify-content: center;
@@ -110,6 +112,8 @@ session_start();
             }
             .opciones:hover{
                 cursor: pointer;
+                border-bottom: solid 3px rgb(124, 69, 153);
+                font-weight: bolder;
             }    
             .breadcrumb{
                 color: rgb(124, 69, 153);
@@ -119,7 +123,7 @@ session_start();
                 text-transform: uppercase;
                 border-bottom: solid 1px rgb(124, 69, 153);
             }
-            button{
+            /* button{
                 background-color: white;
                 color: rgb(124, 69, 153);
                 width: auto;
@@ -131,7 +135,7 @@ session_start();
             button:hover{
                 background-color: rgb(124, 69, 153);
                 color: white;
-            }
+            } */
             .mt-6{
                 margin-top: 24px
             }
