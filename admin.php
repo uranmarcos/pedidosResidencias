@@ -42,8 +42,8 @@ session_start();
         <link href="css/home.css" rel="stylesheet"> 
         <link href="css/modal.css" rel="stylesheet"> 
         <link href="css/notificacion.css" rel="stylesheet"> 
-        <!-- <link href="css/modal.css" rel="stylesheet"> 
-        <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
+        <link href="css/admin.css" rel="stylesheet"> 
+        <!-- <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
     </head>
     <body>
         <div id="app">
@@ -82,64 +82,6 @@ session_start();
             </div>
         </div>
 
-
-        <style>
-            .containerMenu{
-                min-height: 85vh;
-                margin: auto;
-                display: flexbox;
-                align-items: center;
-                color: rgb(94, 93, 93);
-            }
-            .contenedorOpciones{
-                width: 100%;
-                margin: auto;
-                display: flex;
-                justify-content: space-between;
-            }
-            .opciones{
-                border: none;
-                border-radius: 0;
-                border-bottom: solid 1px rgb(124, 69, 153);;
-                background-color: white;
-                color: rgb(124, 69, 153);;
-                text-transform: uppercase;
-                text-align: center;
-                height: 50px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .opciones:hover{
-                cursor: pointer;
-                border-bottom: solid 3px rgb(124, 69, 153);
-                font-weight: bolder;
-            }    
-            .breadcrumb{
-                color: rgb(124, 69, 153);
-                font-size:1em;
-                padding:0 !important; 
-                margin-top: 16px;
-                text-transform: uppercase;
-                border-bottom: solid 1px rgb(124, 69, 153);
-            }
-            /* button{
-                background-color: white;
-                color: rgb(124, 69, 153);
-                width: auto;
-                text-transform: uppercase;
-                height: 40px;
-                border: solid 1px rgb(124, 69, 153);
-                border-radius: 10px;
-            }
-            button:hover{
-                background-color: rgb(124, 69, 153);
-                color: white;
-            } */
-            .mt-6{
-                margin-top: 24px
-            }
-        </style>
         <script>
             var app = new Vue({
                 el: "#app",

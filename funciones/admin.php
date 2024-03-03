@@ -44,8 +44,27 @@
                 $res["mensaje"] = "No se pudo guardar la residencia. Intente nuevamente";
                 $res["error"] = true;
             } 
+        break;
+        
+        case 'editarResidencia':
+            $id = $_POST['id'];
+            $provincia = $_POST["provincia"];
+            $localidad = $_POST["localidad"];
+            $usuario = $_POST["usuario"];
+            $pass = $_POST['pass'];
+            
+            $u = $user -> editarResidencia($id, $provincia, $localidad, $usuario, $pass);
+        
+            if ($u || $u == true) {
+                $res["error"] = false;
+                $res["mensaje"] = "La residencia se guardó correctamente";
+            } else {
+                $res["mensaje"] = "No se pudo guardar la residencia. Intente nuevamente";
+                $res["error"] = true;
+            } 
 
-        break;        
+        break;   
+
     }
     echo json_encode($res);
 

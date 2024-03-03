@@ -20,8 +20,29 @@
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 15% auto; 
     padding: 20px;
     border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
+    width: 40%;
 }
+
+
+@media (max-width: 900px) {
+    .modal-content {
+        width: 70%;
+    }   
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        width: 80%;
+    }   
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        margin: 20% auto; 
+        width: 90%;
+    }   
+}
+  

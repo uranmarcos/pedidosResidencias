@@ -58,7 +58,34 @@ class ApptivaDB {
         }
     }
 
+    public function editarResidencia($id, $provincia, $localidad, $usuario, $pass) {
+        try {
+            // $resultado = $this->conexion->query("UPDATE residencias SET provincia = '$provincia', localidad='$localidad', usuario = '$usuario', pass = '$pass' WHERE id = '$id'") or die();
+            // //return true;
 
+            // if ($resultado === false) {
+            //     return false; // Error al ejecutar la sentencia SQL
+            // }
+            $stmt = $this->conexion->prepare("UPDATE residencias SET provincia = ?, localidad = ?, usuario = ?, pass = ? WHERE id = ?");
+            $stmt->bind_param("ssssi", $provincia, $localidad, $usuario, $pass, $id);
+            if (!$stmt->execute()) {
+                return false;
+                // Manejo de errores
+                die("Error al ejecutar la actualización: " . $stmt->error);
+            }
+            return true;
+            // $idInsertado = $this->conexion->insert_id;
+    
+            // if ($idInsertado > 0) {
+            //     return $idInsertado; // Devuelve el ID de la instancia insertada
+            // } else {
+            //     return false; // No se insertó ninguna instancia o no se obtuvo el ID
+            // }
+        } catch (\Throwable $th) {
+            // return $th;
+            return false;
+        }
+    }
 }
 
 ?>

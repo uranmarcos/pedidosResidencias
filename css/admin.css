@@ -114,3 +114,9 @@ tr{
 .selected{
     font-weight: bolder;
 }
+.btnEditar{
+    color: purple;
+}
+.btnEditar:hover{
+    cursor: pointer;
+}
