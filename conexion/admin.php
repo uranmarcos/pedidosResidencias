@@ -74,13 +74,22 @@ class ApptivaDB {
                 die("Error al ejecutar la actualización: " . $stmt->error);
             }
             return true;
-            // $idInsertado = $this->conexion->insert_id;
-    
-            // if ($idInsertado > 0) {
-            //     return $idInsertado; // Devuelve el ID de la instancia insertada
-            // } else {
-            //     return false; // No se insertó ninguna instancia o no se obtuvo el ID
-            // }
+        } catch (\Throwable $th) {
+            // return $th;
+            return false;
+        }
+    }
+
+    public function editarCategoria($id, $descripcion) {
+        try {
+            $stmt = $this->conexion->prepare("UPDATE categorias SET descripcion = ? WHERE id = ?");
+            $stmt->bind_param("si", $descripcion, $id);
+            if (!$stmt->execute()) {
+                return false;
+                // Manejo de errores
+                die("Error al ejecutar la actualización: " . $stmt->error);
+            }
+            return true;
         } catch (\Throwable $th) {
             // return $th;
             return false;

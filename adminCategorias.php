@@ -42,8 +42,8 @@ session_start();
         <link href="css/home.css" rel="stylesheet"> 
         <link href="css/modal.css" rel="stylesheet"> 
         <link href="css/notificacion.css" rel="stylesheet"> 
-        <!-- <link href="css/modal.css" rel="stylesheet"> 
-        <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
+        <link href="css/admin.css" rel="stylesheet"> 
+        <!--  <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
     </head>
     <body>
         <div id="app">
@@ -117,58 +117,68 @@ session_start();
                                         <div>
                                             <td >{{dato.id}}</td>
                                             <td >{{dato.descripcion.toUpperCase()}}</td> 
+                                            <td>
+                                                <span @click="editar(dato)" class="btnEditar">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                                                    </svg>
+                                                </span>
+                                            </td>
                                         </div>
-                                            <!--
-                                            
-                                            <div v-if="seleccion == 'pedidos'">
-                                                <td v-if="seleccion == 'pedidos'">{{dato.id}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.residencia.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.voluntario.toUpperCase()}}</td>
-                                                <td v-if="seleccion == 'pedidos'">{{dato.fecha}}</td>
-                                            </div> -->
-                                        </tr>
-                                    </div>
-                                </tbody>
-                            </table>
-                        </div> 
-                        <div class="contenedorTabla" v-else>         
-                            <span class="sinResultados">
-                                NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
-                            </span>
-                        </div>       
+                                    </tr>
+                                </div>
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class="contenedorTabla" v-else>         
+                        <span class="sinResultados">
+                            NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
+                        </span>
+                    </div>       
                     <!-- END TABLA -->
-                    </div>
+                    
                 </div>
                 <!-- END TABLA -->
 
-                <!-- MODAL RESIDENCIA -->
-                <div v-if="modal">
+                  <!-- START MODAL  -->
+                  <div v-if="modal">
                     <div id="myModal" class="modal">
                         <div class="modal-content p-0">
                             <div class="modal-header  d-flex justify-content-center">
                                 <h5 class="modal-title" id="ModalLabel">
-                                    {{accionModal.toUpperCase}} RESIDENCIA
+                                    {{accion.toUpperCase()}} CATEGORIA
                                 </h5>
                             </div>
-                            <div class="modal-body row d-flex justify-content-center">
-                                <div class="col-sm-12 mt-3">
-                                    <div class="row rowCategoria d-flex justify-space-around">
-                                        <label for="nombre" class="labelCategoria">Provincia(*)</label>
-                                        <select class="form-control verCategorias">
-                                            <option v-for="provincia in provincias">{{provincia}}</option>
-                                        </select>
-                                    </div>
-                                    <span class="errorLabel" v-if="errorProvincia">Campo requerido</span>
-                                </div>
+                            <div class="modal-body bodyModal row d-flex justify-content-center">
 
                                 <div class="col-sm-12 mt-3">
                                     <div class="row rowCategoria d-flex justify-space-around">
-                                    <label for="nombre" class="labelCategoria">Provincia(*)</label>
-                                        <input class="inputCategoria" :disabled="confirmCategorias" @input="errorNuevaCategoria = false" v-model="nuevaCategoria">
+                                        <label for="nombre" class="labelCategoria">
+                                            Descripción(*)
+                                            <span class="errorLabel" v-if="errorDescripcion">Requerido</span>
+                                        </label>
+                                        <input class="form-control" @input="errorDescripcion = false" v-model="categoria.descripcion">
                                     </div>
-                                    <span class="errorLabel" v-if="errorResidencia">Campo requerido</span>
                                 </div>
+                            </div>
+
+                            <div class="modal-footer d-flex justify-content-between">                                
+                                <button type="button" class="btn boton botonResponsive" @click="cancelar()" :disabled="confirmando">Cancelar</button>
                                 
+                                <button type="button" @click="confirmar()" class="btn boton botonResponsive" v-if="!confirmando">
+                                    Confirmar
+                                </button>
+
+                                <button 
+                                    class="btn boton"
+                                    v-if="confirmando" 
+                                >
+                                    <div class="confirmando">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </button>
                             </div>
 
                             <!-- <div class="modal-body row d-flex justify-content-center">
@@ -179,146 +189,29 @@ session_start();
                                     <b> {{objetoEliminable.nombre}}</b> ?    
                                 </div>                             
                             </div> -->
-
-
-                            <!-- <div class="modal-footer d-flex justify-content-between">
-                                <button type="button" class="btn botonEliminar" @click="cancelarEliminar" >CANCELAR</button>
-                                
-                                <button type="button" @click="confirmarEliminar" class="botonGeneral" v-if="!eliminandoObjeto">
-                                    CONFIRMAR
-                                </button>
-
-                                <button 
-                                    class="botonGeneral"
-                                    v-if="eliminandoObjeto" 
-                                >
-                                    <div class="loading">
-                                        <div class="spinner-border" role="status">
-                                            <span class="sr-only"></span>
-                                        </div>
-                                    </div>
-                                </button>
-                            </div> -->
-
                         </div>
                     </div>
                 </div>    
-                <!-- MODAL CATEGORIAS -->
+                <!-- END MODAL -->
+
+                <!-- NOTIFICACION -->
+                <div role="alert" id="mitoast" aria-live="assertive" @mouseover="ocultarToast" aria-atomic="true" class="toast">
+                    <div class="toast-header">
+                        <!-- Nombre de la Aplicación -->
+                        <div class="row tituloToast" id="tituloToast">
+                            <strong class="mr-auto">{{tituloToast}}</strong>
+                        </div>
+                    </div>
+                    <div class="toast-content">
+                        <div class="row textoToast">
+                            <strong >{{textoToast}}</strong>
+                        </div>
+                    </div>
+                </div>
+                <!-- NOTIFICACION -->
             </div>
         </div>
 
-
-        <style>
-            .containerMenu{
-                min-height: 85vh;
-                margin: auto;
-                display: flexbox;
-                align-items: center;
-                color: rgb(94, 93, 93);
-            }
-            .contenedorOpciones{
-                width: 100%;
-                margin: auto;
-                display: flex;
-                justify-content: space-between;
-            }
-            .breadcrumb{
-                color: rgb(124, 69, 153);
-                font-size:1em;
-                padding:0 !important; 
-                margin-top: 16px;
-                text-transform: uppercase;
-                border-bottom: solid 1px rgb(124, 69, 153);
-            }
-            .opciones{
-                border: none;
-                border-radius: 0;
-                border-bottom: solid 1px rgb(124, 69, 153);;
-                background-color: white;
-                color: rgb(124, 69, 153);;
-                text-transform: uppercase;
-                text-align: center;
-                height: 50px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .opciones:hover{
-                cursor: pointer;
-                border-bottom: solid 3px rgb(124, 69, 153);
-                font-weight: bolder;
-            }  
-            .mt-6{
-                margin-top: 24px
-            }
-            .tituloTabla{
-                display: flex;
-                justify-content: space-between;
-            }
-            .title{
-                font-size: 16px;
-                padding-left: 0px;
-                color: rgb(124, 69, 153);;
-            }
-            .btnCrear{
-                border: solid 1px rgb(124, 69, 153);
-                padding: 0 12px;
-                border-radius: 5px;
-            }
-            .btnCrear:hover{
-                cursor: pointer;
-            }
-        </style>
-        <style scoped>
-            .ir-arriba {
-                background-color: #7C4599;;
-                width: 35px;
-                height: 35px;
-                font-size:20px;
-                border-radius: 50%;
-                color:#fff;
-                cursor:pointer;
-                position: fixed;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                bottom:20px;
-                right:20%;
-            }   
-            .contenedorPlanficaciones{
-                width: 100%;
-                margin:10px auto;
-            }
-            #mitoast{
-                z-index:60;
-            }
-            .sinResultados{
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 20px 10px 20px;
-                text-align: center;
-            }
-            .contenedorTabla{
-                color: rgb(124, 69, 153);
-                border: solid 1px rgb(124, 69, 153);
-                border-radius: 10px;
-                padding: 10xp;
-                margin-top: 16px;
-                width: 100%;
-            }    
-            .table{
-                font-size: 14px;
-                text-align: center
-            }
-            tr{
-                border: solid 1px lightgrey;
-            }
-            .selected{
-                font-weight: bolder;
-            }
-        </style>
         <script>
             var app = new Vue({
                 el: "#app",
@@ -332,7 +225,13 @@ session_start();
                     tituloToast: null,
                     textoToast: null,
                     modal: false,
-                    accionModal: null
+                    categoria: {
+                        id: null,
+                        descripcion: null
+                    },
+                    errorDescripcion: false,
+                    accion: null,
+                    confirmando: false
                 },
                 mounted () {
                     this.getDatos();
@@ -344,6 +243,96 @@ session_start();
                     }
                 },
                 methods:{
+                    cancelar () {
+                        this.modal = false;
+                        this.categoria.id = null;
+                        this.categoria.descripcion = null;
+                    },
+                    resetErrores () {
+                        this.errorDescripcion = false;
+                    },
+                    validarFormulario () {
+                        this.resetErrores();
+                        let validacion = true;
+                        if (!this.categoria.descripcion || this.categoria.descripcion.trim() == '') {
+                            this.errorDescripcion = true;
+                            validacion = false;
+                        }
+                        return validacion;
+                    },
+                    mostrarToast(titulo, texto) {
+                        app.tituloToast = titulo;
+                        app.textoToast = texto;
+                        var toast = document.getElementById("mitoast");
+                        var tituloToast = document.getElementById("tituloToast");
+                        toast.classList.remove("toast");
+                        toast.classList.add("mostrar");
+                        setTimeout(function(){ toast.classList.toggle("mostrar"); }, 10000);
+                        if (titulo == 'Éxito') {
+                            toast.classList.remove("bordeError");
+                            toast.classList.add("bordeExito");
+                            tituloToast.className = "exito";
+                        } else {
+                            toast.classList.remove("bordeExito");
+                            toast.classList.add("bordeError");
+                            tituloToast.className = "errorModal";
+                        }
+                    },
+                    ocultarToast() {
+                        this.tituloToast = "";
+                        this.textoToast = "";
+                        var toast = document.getElementById("mitoast");
+                        toast.classList.remove("mostrar");
+                        toast.classList.add("toast");
+                    },
+                    confirmar () {
+                        if (this.validarFormulario()) {
+                            app.confirmando = true;
+                            let formdata = new FormData();
+                            formdata.append("descripcion", app.categoria.descripcion);
+
+                            if (this.accion == 'crear') {
+                                axios.post("funciones/admin.php?accion=crearCategoria", formdata)
+                                .then(function(response){
+                                    if (response.data.error) {
+                                        app.mostrarToast("Error", response.data.mensaje);
+                                    } else {
+                                    app.mostrarToast("Éxito", response.data.mensaje);
+                                    app.modal = false;
+                                    app.resetCategoria();
+                                    app.getDatos();
+                                }
+                                app.confirmando = false;
+                                }).catch( error => {
+                                    app.confirmando = false;
+                                    app.mostrarToast("Error", "No se pudo crear la categoria");
+                                })
+                            }
+                            if (this.accion == 'editar') {
+                                formdata.append("id", app.categoria.id);
+                                axios.post("funciones/admin.php?accion=editarCategoria", formdata)
+                                .then(function(response){
+                                    console.log(response);
+                                    if (response.data.error) {
+                                        app.mostrarToast("Error", response.data.mensaje);
+                                    } else {
+                                    app.mostrarToast("Éxito", response.data.mensaje);
+                                    app.modal = false;
+                                    app.resetCategoria();
+                                    app.getDatos();
+                                }
+                                app.confirmando = false;
+                                }).catch( error => {
+                                    app.confirmando = false;
+                                    app.mostrarToast("Error", "No se pudo editar la categoria");
+                                })
+                            }
+                        }
+                    },
+                    resetCategoria () {
+                        this.categoria.id = null;
+                        this.categoria.residencia = null;
+                    },
                     irA (destino) {
                         switch (destino) {
                             case "admin":
@@ -370,7 +359,13 @@ session_start();
                     },
                     crear (accion) {
                         this.modal = true;
-                        this.accionModal = accion;
+                        this.accion = accion;
+                    },
+                    editar (dato) {
+                        this.modal = true;
+                        this.accion = 'editar';
+                        this.categoria.id = dato.id;
+                        this.categoria.descripcion = dato.descripcion;
                     },
                     getDatos() {
                         this.buscando = true;

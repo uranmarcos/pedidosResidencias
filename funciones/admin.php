@@ -65,6 +65,37 @@
 
         break;   
 
+        case 'crearCategoria':
+            $descripcion = $_POST["descripcion"];
+            $data = "'" . $descripcion . "'";
+            
+            $u = $user -> insertar("categorias", $data);
+        
+            if ($u) {
+                $res["error"] = false;
+                $res["mensaje"] = "La categoria se guardó correctamente";
+            } else {
+                $res["mensaje"] = "No se pudo guardar la categoria. Intente nuevamente";
+                $res["error"] = true;
+            } 
+        break;
+        
+        case 'editarCategoria':
+            $id = $_POST['id'];
+            $descripcion = $_POST["descripcion"];
+            
+            $u = $user -> editarCategoria($id, $descripcion);
+        
+            if ($u || $u == true) {
+                $res["error"] = false;
+                $res["mensaje"] = "La categoria se guardó correctamente";
+            } else {
+                $res["mensaje"] = "No se pudo guardar la categoria. Intente nuevamente";
+                $res["error"] = true;
+            } 
+
+        break;   
+
     }
     echo json_encode($res);
 
