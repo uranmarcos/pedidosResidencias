@@ -123,7 +123,7 @@ session_start();
                                             <div>
                                                 <td>{{dato.id}}</td>
                                                 <td>{{categorias.filter(e => e.id == dato.categoria)[0].descripcion.toUpperCase()}}</td>
-                                                <td>{{dato.descripcion.toUpperCase()}}</td>
+                                                <td>{{dato.descripcion.toUpperCase()}} ({{dato.medida}})</td>
                                                 <td>
                                                     <span @click="editar(dato)" class="btnEditar">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -177,6 +177,19 @@ session_start();
                                             <span class="errorLabel" v-if="errorDescripcion">Requerido</span>
                                         </label>
                                         <input class="form-control" @input="errorDescripcion = false" v-model="articulo.descripcion">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Medida(*)
+                                            <span class="errorLabel" v-if="errorMedida">Requerido</span>
+                                        </label>
+                                        <select class="form-control" v-model="articulo.medida">
+                                            <option selected disabled>Seleccione...</option>
+                                            <option v-for="medida in medidas" >{{medida}}</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -247,12 +260,21 @@ session_start();
                     categorias: [],
                     errorCategoria: false,
                     errorDescripcion: false,
+                    errorMedida: false,
                     articulo: {
                         id: null, 
                         categoria: null,
-                        descripcion: null
+                        descripcion: null,
+                        medida: null
                     },
-                    confirmando: false
+                    confirmando: false,
+                    medidas: [
+                        "kilogramos",
+                        "latas",
+                        "litros",
+                        "sobres",
+                        "unidades"
+                    ]
                 },
                 mounted () {
                     this.getCategorias();
@@ -322,11 +344,13 @@ session_start();
                         this.accion = accion;
                     },
                     editar (dato) {
+                        console.log(dato);
                         this.modal = true;
                         this.accion = 'editar';
                         this.articulo.id = dato.id;
                         this.articulo.categoria = dato.categoria;
                         this.articulo.descripcion = dato.descripcion;
+                        this.articulo.medida = dato.medida;
                     },
                     getDatos() {
                         this.buscando = true;
@@ -369,12 +393,17 @@ session_start();
                     resetErrores () {
                         this.errorCategoria = false;
                         this.errorDescripcion = false;
+                        this.errorMedida = false;
                     },
                     validarFormulario () {
                         this.resetErrores();
                         let validacion = true;
                         if (!this.articulo.categoria) {
                             this.errorCategoria = true;
+                            validacion = false;
+                        }
+                        if (!this.articulo.medida) {
+                            this.errorMedida = true;
                             validacion = false;
                         }
                         if (!this.articulo.descripcion || this.articulo.descripcion.trim() == '') {
@@ -414,6 +443,7 @@ session_start();
                             let formdata = new FormData();
                             formdata.append("categoria", app.articulo.categoria);
                             formdata.append("descripcion", app.articulo.descripcion);
+                            formdata.append("medida", app.articulo.medida);
 
                             if (this.accion == 'crear') {
                                 axios.post("funciones/admin.php?accion=crearArticulo", formdata)
@@ -456,6 +486,7 @@ session_start();
                         this.articulo.id = null;
                         this.articulo.categoria = null;
                         this.articulo.descripcion = null;
+                        this.articulo.medida = null;
                     },
                 }
             })

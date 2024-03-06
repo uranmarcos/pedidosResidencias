@@ -101,7 +101,8 @@
         case 'crearArticulo':
             $descripcion = $_POST["descripcion"];
             $categoria = $_POST["categoria"];
-            $data = "'" . $descripcion . "', '" . $categoria . "'";
+            $medida = $_POST["medida"];
+            $data = "'" . $descripcion . "', '" . $categoria . "', '" . $medida . "'";
             
             
             $u = $user -> insertar("articulos", $data);
@@ -119,8 +120,9 @@
             $id = $_POST['id'];
             $descripcion = $_POST["descripcion"];
             $categoria = $_POST["categoria"];
+            $medida = $_POST["medida"];
             
-            $u = $user -> editarArticulo($id, $descripcion, $categoria);
+            $u = $user -> editarArticulo($id, $descripcion, $categoria, $medida);
         
             if ($u || $u == true) {
                 $res["error"] = false;

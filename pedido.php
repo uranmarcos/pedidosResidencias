@@ -52,101 +52,56 @@ session_start();
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irAHome()">Inicio</span>  -  <span class="mx-2 grey"> Pedidos realizados </span>
+                        <span class="pointer mx-2" @click="irAHome()">Inicio</span>  -  <span class="mx-2 grey"> Generar Pedido </span>
                     </div>
                 </div>
-                <!-- END BREADCRUMB -->
+                <!-- END BREADCRUMB -->            
 
-                <!-- START NAVEGADOR -->
-                <div class="col-12 p-0">
-                    <div class="navegador">
-                        <select class="form-control selectResidencia" @change="page= 1, getPedidos()" v-model="usuarioBuscado">
-                            <option value="0" >Todos los usuarios</option>
-                            <option v-for="usuario in usuarios" v-bind:value="usuario.id" >{{usuario.localidad}}</option>
-                        </select>
 
-                        <button class="button mr-2" @click="irA('admin')">
-                            Admin
-                        </button>
-                        <button class="button"  @click="irA('pedido')">
-                            Nuevo Pedido
-                        </button>
-                    </div>
-                </div>
-                <!-- END NAVEGADOR -->
-            
-
-                <div class="row mt-6">
-                    <!-- START BREADCRUMB -->
-                    <div class="col-12 px-3" v-if="rol == 'superAdmin'">
-                        <div v-if="consultandoLimpieza" class="limpiezaPedidos">
-                            Verificando si existen pedidos para eliminar...
-                        </div>
-                        <div v-else class="atencionLimpieza">
-                            <div  class="atencionLimpieza px-2">
-                                {{pedidosALimpiar}} pedidos para limpiar  
-                                <button 
-                                    type="button" 
-                                    class="botonLimpiar" 
-                                    @click="limpiarPedidos" 
-                                    v-if="pedidosALimpiar != 0"
-                                >
-                                    Limpiar
-                                </button>
+                <div class="col-12">
+                    <!-- START COMPONENTE LOADING BUSCANDO ARTICULOS -->
+                    <div class="contenedorLoading" v-if="buscandoArticulos">
+                        <div class="loading">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only"></span>
                             </div>
                         </div>
                     </div>
-                    <!-- END BREADCRUMB -->
-
-
-                    <div class="col-12">
-                        <!-- START COMPONENTE LOADING BUSCANDO pedidos -->
-                        <div class="contenedorLoading" v-if="buscandoPedidos">
-                            <div class="loading">
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- END COMPONENTE LOADING BUSCANDO pedidos -->
-                        <div v-else>
-                            <div v-if="pedidos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
-                                <span class="observacion">Se listan los pedidos realizados en los últimos 6 meses. Transcurrido ese tiempo el pedido se elimina*</span>
-                                <table class="table">
-                                    <thead>
-                                        <tr class="trHead">
-                                            <th scope="col">Número</th>
-                                            <th scope="col">Voluntario</th>
-                                            <th scope="col">Residencia</th>
-                                            <th scope="col">Fecha</th>
-                                            <th scope="col">Ver</th>
+                    <!-- END COMPONENTE LOADING BUSCANDO ARTICULOS -->
+                    
+                    <div v-else>
+                        <div v-if="articulos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
+                            <table class="table">
+                                <thead>
+                                    <tr class="trHead">
+                                        <th scope="col">Categoria</th>
+                                        <th scope="col">Articulo</th>
+                                        <th scope="col">Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <div>
+                                        <tr v-for="articulo in articulos">
+                                            <td>{{articulo.id}}</td>
+                                            <td>{{articulo.descripcion}}</td>
+                                            <td>{{articulo.cantidad}}</td>
+                                            <td class="py-0">
+                                                <button 
+                                                    type="button" 
+                                                    class="btn botonSmallEye" 
+                                                    @click="verPedido(pedido.id)" 
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                                    </svg>
+                                                </button>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <div>
-                                            <tr v-for="pedido in pedidos">
-                                                <td>{{pedido.id}}</td>
-                                                <td>{{pedido.voluntario}}</td>
-                                                <td>{{pedido.residencia}}</td>
-                                                <td>{{formatearFecha(pedido.fecha)}}</td>
-                                                <td class="py-0">
-                                                    <button 
-                                                        type="button" 
-                                                        class="btn botonSmallEye" 
-                                                        @click="verPedido(pedido.id)" 
-                                                    >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                                                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </div>
-                                    </tbody>
-                                </table>
-                            </div> 
+                                    </div>
+                                </tbody>
+                            </table>
+                        </div> 
                             <div class="contenedorTabla" v-else>         
                                 <span class="sinResultados">
                                     NO SE ENCONTRÓ RESULTADOS PARA MOSTRAR
@@ -329,25 +284,16 @@ session_start();
                 components: {                
                 },
                 data: {
-                    buscandoPedidos: false,
-                    pedidos: [],
+                    buscandoArticulos: false,
+                    articulos: [],
+                    categorias: [],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,
-                    rol : null,
-                    pedidosALimpiar: null,
-                    consultandoLimpieza: false,
-                    usuarioBuscado: null,
-                    usuarios: []
                 },
                 mounted () {
-                    this.getPedidos();
-                    this.getUsuarios();
-                    // this.rol = 
-                    //?php echo $rol; ?>";
-                    // if (this.rol == 'superAdmin'){
-                    //     this.existenPedidosParaEliminar();
-                    // }
+                    this.getCategorias();
+                    this.getDatos();
                 },
                 beforeUpdate(){
                     window.onscroll = function (){
@@ -361,79 +307,41 @@ session_start();
                             case "admin":
                                 window.location.href = 'admin.php';    
                                 break; 
-                            case "pedido":
-                                window.location.href = 'pedido.php';    
-                                break; 
-                            // case "nuevo":
-                            //     window.location.href = 'nuevo.php';    
-                            //     break;
                             default:
                                 break;
                         }
                     },
-                    getPedidos() {
-                        this.buscandoPedidos = true;
+                    getDatos() {
+                        this.buscando = true;
                         let formdata = new FormData();
-
-                        axios.post("funciones/acciones.php?accion=getPedidos", formdata)
+                        formdata.append("opcion", 'articulos');
+                        axios.post("funciones/admin.php?accion=getDatos", formdata)
                         .then(function(response){ 
-                            console.log(response);
-                            app.buscandoPedidos = false;
+                            app.buscando = false;
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
                             } else {
                                 if (response.data.pedidos != false) {
-                                    app.pedidos = response.data.pedidos;
+                                    app.articulos = response.data.pedidos;
                                 } else {
-                                    app.pedidos = []
+                                    app.articulos = []
                                 }
                             }
                         });
                     },
-                    getUsuarios() {
+                    getCategorias() {
                         let formdata = new FormData();
-
-                        axios.post("funciones/acciones.php?accion=getUsuarios", formdata)
-                        .then(function(response){
+                        formdata.append("opcion", 'categorias');
+                        axios.post("funciones/admin.php?accion=getDatos", formdata)
+                        .then(function(response){ 
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
                             } else {
-                                if (response.data.usuarios != false) {
-                                    app.usuarios = response.data.usuarios;
+                                if (response.data.pedidos != false) {
+                                    app.categorias = response.data.pedidos;
                                 } else {
-                                    app.usuarios = []
+                                    app.categorias = []
                                 }
-                            }
-                        });
-                    },
-                    existenPedidosParaEliminar () {
-                        this.consultandoLimpieza = true;
-                        axios.post("funciones/acciones.php?accion=consultandoLimpieza")
-                        .then(function(response){ 
-                            console.log(response.data);
-                            app.consultandoLimpieza = false;
-                            if (response.data.error) {
-                                app.mostrarToast("Error", response.data.mensaje);
-                            } else {
-                                app.pedidosALimpiar = response.data.cantidad;
-                                // if (response.data.cantidad != false) {
-                                // } else {
-                                //     app.pedidos = null
-                                // }
-                            }
-                        });
-                    },
-                    limpiarPedidos () {
-                        this.limpiandoPedidos = true;
-                        axios.post("funciones/acciones.php?accion=limpiarPedidos")
-                        .then(function(response){ 
-                            console.log(response.data);
-                            app.limpiandoPedidos = false;
-                            if (response.data.error) {
-                                app.mostrarToast("Error", response.data.mensaje);
-                            } else {
-                                app.mostrarToast("Éxito", "La limpieza se realizó correctamente");
-                                app.existenPedidosParaEliminar();
                             }
                         });
                     },
