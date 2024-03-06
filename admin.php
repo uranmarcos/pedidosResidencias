@@ -62,8 +62,8 @@ session_start();
 
                 <!-- START OPCIONES -->
                 <div class="row p-0 contenedorOpciones mt-6">
-                    <button class="col-3 opciones" @click="irA('residencias')">
-                        Residencias
+                    <button class="col-3 opciones" @click="irA('usuarios')">
+                        Usuarios
                     </button>
                     
                     <button class="col-3 opciones" @click="irA('categorias')">
@@ -106,8 +106,8 @@ session_start();
                             case "home":
                                 window.location.href = 'home.php';    
                                 break; 
-                            case "residencias":
-                                window.location.href = 'adminResidencias.php';    
+                            case "usuarios":
+                                window.location.href = 'adminUsuarios.php';    
                                 break; 
                             case "categorias":
                                 window.location.href = 'adminCategorias.php';    

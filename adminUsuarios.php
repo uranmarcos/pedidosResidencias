@@ -55,15 +55,15 @@ session_start();
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Residencias </span>
+                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Usuarios </span>
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
 
                 <!-- START OPCIONES -->
                 <div class="row p-0 contenedorOpciones mt-6">
-                    <button class="col-3 selected opciones" @click="irA('residencias')">
-                        Residencias
+                    <button class="col-3 selected opciones" @click="irA('usuarios')">
+                        Usuarios
                     </button>
                     
                     <button class="col-3 opciones" @click="irA('categorias')">
@@ -93,7 +93,7 @@ session_start();
                 <!-- START TABLA -->
                 <div v-else class="mt-6">
                     <div class="tituloTabla">
-                        <span class="title">LISTADO DE RESIDENCIAS</span>
+                        <span class="title">LISTADO DE USUARIOS</span>
                         <span
                             class="btnCrear"
                             @click = "crear('crear')"
@@ -151,7 +151,7 @@ session_start();
                         <div class="modal-content p-0">
                             <div class="modal-header  d-flex justify-content-center">
                                 <h5 class="modal-title" id="ModalLabel">
-                                    {{accion.toUpperCase()}} RESIDENCIA
+                                    {{accion.toUpperCase()}} USUARIO
                                 </h5>
                             </div>
                             <div class="modal-body bodyModal row d-flex justify-content-center">
@@ -161,7 +161,7 @@ session_start();
                                             Provincia(*)
                                             <span class="errorLabel" v-if="errorProvincia">Requerido</span>
                                         </label>
-                                        <select class="form-control" v-model="residencia.provincia">
+                                        <select class="form-control" v-model="usuario.provincia">
                                             <option selected disabled>Seleccione...</option>
                                             <option v-for="provincia in provincias" :value="provincia">{{provincia}}</option>
                                         </select>
@@ -174,7 +174,7 @@ session_start();
                                             Localidad(*)
                                             <span class="errorLabel" v-if="errorLocalidad">Requerido</span>
                                         </label>
-                                        <input class="form-control" @input="errorProvincia = false" @keyup="crearUsuario(residencia.localidad)" v-model="residencia.localidad">
+                                        <input class="form-control" @input="errorProvincia = false" @keyup="crearUsuario(usuario.localidad)" v-model="usuario.localidad">
                                     </div>
                                 </div>
                                 
@@ -184,14 +184,14 @@ session_start();
                                             Usuario(*)
                                             <span class="errorLabel" v-if="errorUsuario">Requerido</span>
                                         </label>
-                                        <input class="form-control" v-model="residencia.usuario">
+                                        <input class="form-control" v-model="usuario.usuario">
                                     </div>
                                 </div>
 
                                 <div class="col-sm-12 mt-3">
                                     <div class="row rowCategoria d-flex justify-space-around">
                                     <label for="nombre" class="labelCategoria">Contraseña</label>
-                                        <input class="form-control" disabled v-model="residencia.password">
+                                        <input class="form-control" disabled v-model="usuario.password">
                                     </div>
                                 </div>
                             </div>
@@ -288,7 +288,7 @@ session_start();
                     errorProvincia: false,
                     errorLocalidad: false,
                     errorUsuario: false,
-                    residencia: {
+                    usuario: {
                         id: null,
                         provincia: null,
                         localidad: null,
@@ -308,11 +308,11 @@ session_start();
                 methods:{
                     cancelar () {
                         this.modal = false;
-                        this.residencia.id = null;
-                        this.residencia.provincia = null;
-                        this.residencia.localidad = null;
-                        this.residencia.usuario = null;
-                        this.residencia.password = null;
+                        this.usuario.id = null;
+                        this.usuario.provincia = null;
+                        this.usuario.localidad = null;
+                        this.usuario.usuario = null;
+                        this.usuario.password = null;
                     },
                     crearUsuario (param) {
                         if (param) {
@@ -329,8 +329,8 @@ session_start();
                             param = param.split('').map(letra => acentos[letra] || letra).join('');
                             // Reemplazo caracteres especiales
                             param = param.replace(/[^a-zA-Z]/g, "").toLowerCase().replaceAll(" ",'');;
-                            this.residencia.usuario = param + "@fundacionsi.org.ar";
-                            this.residencia.password = 30712506829;
+                            this.usuario.usuario = param + "@fundacionsi.org.ar";
+                            this.usuario.password = 30712506829;
                         }
                     },
                     resetErrores () {
@@ -341,15 +341,15 @@ session_start();
                     validarFormulario () {
                         this.resetErrores();
                         let validacion = true;
-                        if (!this.residencia.provincia) {
+                        if (!this.usuario.provincia) {
                             this.errorProvincia = true;
                             validacion = false;
                         }
-                        if (!this.residencia.localidad || this.residencia.localidad.trim() == '') {
+                        if (!this.usuario.localidad || this.usuario.localidad.trim() == '') {
                             this.errorLocalidad = true;
                             validacion = false;
                         }
-                        if (!this.residencia.usuario || this.residencia.usuario.trim() == '') {
+                        if (!this.usuario.usuario || this.usuario.usuario.trim() == '') {
                             this.errorUsuario = true;
                             validacion = false;
                         }
@@ -384,54 +384,54 @@ session_start();
                         if (this.validarFormulario()) {
                             app.confirmando = true;
                             let formdata = new FormData();
-                            formdata.append("provincia", app.residencia.provincia);
-                            formdata.append("localidad", app.residencia.localidad);
-                            formdata.append("usuario", app.residencia.usuario);
-                            formdata.append("pass", app.residencia.password);
+                            formdata.append("provincia", app.usuario.provincia);
+                            formdata.append("localidad", app.usuario.localidad);
+                            formdata.append("usuario", app.usuario.usuario);
+                            formdata.append("pass", app.usuario.password);
 
                             if (this.accion == 'crear') {
-                                axios.post("funciones/admin.php?accion=crearResidencia", formdata)
+                                axios.post("funciones/admin.php?accion=crearUsuario", formdata)
                                 .then(function(response){
                                     if (response.data.error) {
                                         app.mostrarToast("Error", response.data.mensaje);
                                     } else {
                                     app.mostrarToast("Éxito", response.data.mensaje);
                                     app.modal = false;
-                                    app.resetResidencia();
+                                    app.resetUsuario();
                                     app.getDatos();
                                 }
                                 app.confirmando = false;
                                 }).catch( error => {
                                     app.confirmando = false;
-                                    app.mostrarToast("Error", "No se pudo crear la residencia");
+                                    app.mostrarToast("Error", "No se pudo crear el usuario");
                                 })
                             }
                             if (this.accion == 'editar') {
-                                formdata.append("id", app.residencia.id);
-                                axios.post("funciones/admin.php?accion=editarResidencia", formdata)
+                                formdata.append("id", app.usuario.id);
+                                axios.post("funciones/admin.php?accion=editarUsuario", formdata)
                                 .then(function(response){
                                     if (response.data.error) {
                                         app.mostrarToast("Error", response.data.mensaje);
                                     } else {
                                     app.mostrarToast("Éxito", response.data.mensaje);
                                     app.modal = false;
-                                    app.resetResidencia();
+                                    app.resetUsuario();
                                     app.getDatos();
                                 }
                                 app.confirmando = false;
                                 }).catch( error => {
                                     app.confirmando = false;
-                                    app.mostrarToast("Error", "No se pudo editar la residencia");
+                                    app.mostrarToast("Error", "No se pudo editar el usuario");
                                 })
                             }
                         }
                     },
-                    resetResidencia () {
-                        this.residencia.id = null;
-                        this.residencia.provincia = null;
-                        this.residencia.localidad = null;
-                        this.residencia.usuario = null;
-                        this.residencia.password = null;
+                    resetUsuario () {
+                        this.usuario.id = null;
+                        this.usuario.provincia = null;
+                        this.usuario.localidad = null;
+                        this.usuario.usuario = null;
+                        this.usuario.password = null;
                     },
                     estaOrdenadoAscendentemente(atributo) {
                         for (let i = 1; i < this.datos.length; i++) {
@@ -469,8 +469,8 @@ session_start();
                             case "home":
                                 window.location.href = 'home.php';    
                                 break; 
-                            case "residencias":
-                                window.location.href = 'adminResidencias.php';    
+                            case "usuarios":
+                                window.location.href = 'adminUsuarios.php';    
                                 break; 
                             case "categorias":
                                 window.location.href = 'adminCategorias.php';    
@@ -492,16 +492,16 @@ session_start();
                     editar (dato) {
                         this.modal = true;
                         this.accion = 'editar';
-                        this.residencia.id = dato.id;
-                        this.residencia.provincia = dato.residencia.split(' - ')[0];
-                        this.residencia.localidad = dato.residencia.split(' - ')[1];
-                        this.residencia.usuario = dato.usuario;
-                        this.residencia.password = dato.pass;
+                        this.usuario.id = dato.id;
+                        this.usuario.provincia = dato.residencia.split(' - ')[0];
+                        this.usuario.localidad = dato.residencia.split(' - ')[1];
+                        this.usuario.usuario = dato.usuario;
+                        this.usuario.password = dato.pass;
                     },
                     getDatos() {
                         this.buscando = true;
                         let formdata = new FormData();
-                        formdata.append("opcion", 'residencias');
+                        formdata.append("opcion", 'usuarios');
                         axios.post("funciones/admin.php?accion=getDatos", formdata)
                         .then(function(response){ 
                             app.buscando = false;

@@ -28,9 +28,9 @@ class ApptivaDB {
         }
     }
 
-    public function getResidencias() {
+    public function getUsuarios() {
         try {
-            $resultado = $this->conexion->query("SELECT * FROM residencias") or die();
+            $resultado = $this->conexion->query("SELECT * FROM usuarios") or die();
 
             return $resultado->fetch_all(MYSQLI_ASSOC);
         } catch (\Throwable $th) {

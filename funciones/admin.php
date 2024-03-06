@@ -28,38 +28,38 @@
 
         break;
 
-        case 'crearResidencia':
+        case 'crearUsuario':
             $provincia = $_POST["provincia"];
             $localidad = $_POST["localidad"];
             $usuario = $_POST["usuario"];
             $pass = $_POST['pass'];
             $data = "'" . $provincia . "', '" . $localidad . "', '" . $usuario . "', '" . $pass . "'";
             
-            $u = $user -> insertar("residencias", $data);
+            $u = $user -> insertar("usuarios", $data);
         
             if ($u) {
                 $res["error"] = false;
-                $res["mensaje"] = "La residencia se guardó correctamente";
+                $res["mensaje"] = "El usuario se guardó correctamente";
             } else {
-                $res["mensaje"] = "No se pudo guardar la residencia. Intente nuevamente";
+                $res["mensaje"] = "No se pudo guardar el usuario. Intente nuevamente";
                 $res["error"] = true;
             } 
         break;
         
-        case 'editarResidencia':
+        case 'editarUsuario':
             $id = $_POST['id'];
             $provincia = $_POST["provincia"];
             $localidad = $_POST["localidad"];
             $usuario = $_POST["usuario"];
             $pass = $_POST['pass'];
             
-            $u = $user -> editarResidencia($id, $provincia, $localidad, $usuario, $pass);
+            $u = $user -> editarUsuario($id, $provincia, $localidad, $usuario, $pass);
         
             if ($u || $u == true) {
                 $res["error"] = false;
-                $res["mensaje"] = "La residencia se guardó correctamente";
+                $res["mensaje"] = "El usuario se guardó correctamente";
             } else {
-                $res["mensaje"] = "No se pudo guardar la residencia. Intente nuevamente";
+                $res["mensaje"] = "No se pudo guardar el usuario. Intente nuevamente";
                 $res["error"] = true;
             } 
 

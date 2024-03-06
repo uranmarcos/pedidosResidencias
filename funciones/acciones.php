@@ -33,11 +33,11 @@
 
         break;
 
-        case 'getResidencias':
-            $u = $user -> getResidencias();
+        case 'getUsuarios':
+            $u = $user -> getUsuarios();
 
             if ($u || $u == []) { 
-                $res["residencias"] = $u;
+                $res["usuarios"] = $u;
                 $res["mensaje"] = "La consulta se realizó correctamente";
             } else {
                 $res["mensaje"] = "Hubo un error al recuperar la información. Por favor recargue la página.";

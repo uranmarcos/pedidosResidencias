@@ -60,9 +60,9 @@ session_start();
                 <!-- START NAVEGADOR -->
                 <div class="col-12 p-0">
                     <div class="navegador">
-                        <select class="form-control selectResidencia" @change="page= 1, getPedidos()" v-model="residenciaBuscada">
-                            <option value="0" >Todas las residencias</option>
-                            <option v-for="residencia in residencias" v-bind:value="residencia.id" >{{residencia.localidad}}</option>
+                        <select class="form-control selectResidencia" @change="page= 1, getPedidos()" v-model="usuarioBuscado">
+                            <option value="0" >Todos los usuarios</option>
+                            <option v-for="usuario in usuarios" v-bind:value="usuario.id" >{{residencia.localidad}}</option>
                         </select>
 
                         <button class="button mr-2" @click="irA('admin')">
@@ -337,12 +337,12 @@ session_start();
                     rol : null,
                     pedidosALimpiar: null,
                     consultandoLimpieza: false,
-                    residenciaBuscada: null,
-                    residencias: []
+                    usuarioBuscado: null,
+                    usuarios: []
                 },
                 mounted () {
                     this.getPedidos();
-                    this.getResidencias();
+                    this.getUsuarios();
                     // this.rol = 
                     //?php echo $rol; ?>";
                     // if (this.rol == 'superAdmin'){
@@ -387,19 +387,18 @@ session_start();
                             }
                         });
                     },
-                    getResidencias() {
+                    getUsuarios() {
                         let formdata = new FormData();
 
-                        axios.post("funciones/acciones.php?accion=getResidencias", formdata)
+                        axios.post("funciones/acciones.php?accion=getUsuarios", formdata)
                         .then(function(response){
-                            console.log(response); 
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
                             } else {
-                                if (response.data.residencias != false) {
-                                    app.residencias = response.data.residencias;
+                                if (response.data.usuarios != false) {
+                                    app.usuarios = response.data.usuarios;
                                 } else {
-                                    app.residencias = []
+                                    app.usuarios = []
                                 }
                             }
                         });

@@ -25,8 +25,8 @@ class ApptivaDB {
                 $resultado = $this->conexion->query("SELECT id, descripcion, categoria FROM articulos ORDER BY categoria, descripcion") or die();
             } else if ($opcion == 'pedidos') {
                 $resultado = $this->conexion->query("SELECT id, residencia, voluntario, fecha FROM pedidos") or die();
-            } else if ($opcion == 'residencias') {
-                $resultado = $this->conexion->query("SELECT id, CONCAT(provincia,' - ', localidad) as residencia, usuario, pass FROM residencias") or die();
+            } else if ($opcion == 'usuarios') {
+                $resultado = $this->conexion->query("SELECT id, CONCAT(provincia,' - ', localidad) as residencia, usuario, pass FROM usuarios") or die();
             } else {
                 $resultado = $this->conexion->query("SELECT * FROM $opcion") or die();
             }
@@ -59,15 +59,9 @@ class ApptivaDB {
         }
     }
 
-    public function editarResidencia($id, $provincia, $localidad, $usuario, $pass) {
+    public function editarUsuario($id, $provincia, $localidad, $usuario, $pass) {
         try {
-            // $resultado = $this->conexion->query("UPDATE residencias SET provincia = '$provincia', localidad='$localidad', usuario = '$usuario', pass = '$pass' WHERE id = '$id'") or die();
-            // //return true;
-
-            // if ($resultado === false) {
-            //     return false; // Error al ejecutar la sentencia SQL
-            // }
-            $stmt = $this->conexion->prepare("UPDATE residencias SET provincia = ?, localidad = ?, usuario = ?, pass = ? WHERE id = ?");
+            $stmt = $this->conexion->prepare("UPDATE usuarios SET provincia = ?, localidad = ?, usuario = ?, pass = ? WHERE id = ?");
             $stmt->bind_param("ssssi", $provincia, $localidad, $usuario, $pass, $id);
             if (!$stmt->execute()) {
                 return false;
