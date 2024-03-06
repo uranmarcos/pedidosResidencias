@@ -26,7 +26,7 @@ class ApptivaDB {
             } else if ($opcion == 'pedidos') {
                 $resultado = $this->conexion->query("SELECT id, residencia, voluntario, fecha FROM pedidos") or die();
             } else if ($opcion == 'usuarios') {
-                $resultado = $this->conexion->query("SELECT id, CONCAT(provincia,' - ', localidad) as residencia, usuario, pass FROM usuarios") or die();
+                $resultado = $this->conexion->query("SELECT id, CONCAT(provincia,' - ', localidad) as residencia, usuario, pass, rol FROM usuarios") or die();
             } else {
                 $resultado = $this->conexion->query("SELECT * FROM $opcion") or die();
             }
@@ -59,10 +59,10 @@ class ApptivaDB {
         }
     }
 
-    public function editarUsuario($id, $provincia, $localidad, $usuario, $pass) {
+    public function editarUsuario($id, $provincia, $localidad, $usuario, $pass, $rol) {
         try {
-            $stmt = $this->conexion->prepare("UPDATE usuarios SET provincia = ?, localidad = ?, usuario = ?, pass = ? WHERE id = ?");
-            $stmt->bind_param("ssssi", $provincia, $localidad, $usuario, $pass, $id);
+            $stmt = $this->conexion->prepare("UPDATE usuarios SET provincia = ?, localidad = ?, usuario = ?, pass = ?, rol = ? WHERE id = ?");
+            $stmt->bind_param("sssssi", $provincia, $localidad, $usuario, $pass, $rol, $id);
             if (!$stmt->execute()) {
                 return false;
                 // Manejo de errores

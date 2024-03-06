@@ -155,7 +155,7 @@ session_start();
                                 </h5>
                             </div>
                             <div class="modal-body bodyModal row d-flex justify-content-center">
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12 mt-1">
                                     <div class="row rowCategoria d-flex justify-space-around">
                                         <label for="nombre" class="labelCategoria">
                                             Provincia(*)
@@ -168,7 +168,7 @@ session_start();
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12 mt-1">
                                     <div class="row rowCategoria d-flex justify-space-around">
                                         <label for="nombre" class="labelCategoria">
                                             Localidad(*)
@@ -178,7 +178,7 @@ session_start();
                                     </div>
                                 </div>
                                 
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12 mt-1">
                                     <div class="row rowCategoria d-flex justify-space-around">
                                         <label for="nombre" class="labelCategoria">
                                             Usuario(*)
@@ -188,7 +188,18 @@ session_start();
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12 mt-1">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Rol(*)
+                                        </label>
+                                        <select class="form-control" v-model="usuario.rol">
+                                            <option v-for="rol in roles" :value="rol">{{rol}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 mt-1">
                                     <div class="row rowCategoria d-flex justify-space-around">
                                     <label for="nombre" class="labelCategoria">Contraseña</label>
                                         <input class="form-control" disabled v-model="usuario.password">
@@ -216,10 +227,10 @@ session_start();
                             </div>
 
                             <!-- <div class="modal-body row d-flex justify-content-center">
-                                <div class="col-sm-12 mt-3 d-flex justify-content-center">
+                                <div class="col-sm-12 mt-1 d-flex justify-content-center">
                                     ¿Desea eliminar {{perfil == 'biblioteca' ? 'el libro' : perfil == 'recursos' ? 'el recurso' : 'la planificación'}}
                                 </div>
-                                <div class="col-sm-12 mt-3 d-flex justify-content-center">
+                                <div class="col-sm-12 mt-1 d-flex justify-content-center">
                                     <b> {{objetoEliminable.nombre}}</b> ?    
                                 </div>                             
                             </div> -->
@@ -292,9 +303,15 @@ session_start();
                         id: null,
                         provincia: null,
                         localidad: null,
-                        usuario: null
+                        usuario: null,
+                        rol: 'residencia'
                     },
-                    confirmando: false
+                    confirmando: false,
+                    roles: [
+                        "residencia",
+                        "admin",
+                        "master"
+                    ]
                 },
                 mounted () {
                     this.getDatos();
@@ -308,11 +325,7 @@ session_start();
                 methods:{
                     cancelar () {
                         this.modal = false;
-                        this.usuario.id = null;
-                        this.usuario.provincia = null;
-                        this.usuario.localidad = null;
-                        this.usuario.usuario = null;
-                        this.usuario.password = null;
+                        this.resetUsuario();
                     },
                     crearUsuario (param) {
                         if (param) {
@@ -388,6 +401,7 @@ session_start();
                             formdata.append("localidad", app.usuario.localidad);
                             formdata.append("usuario", app.usuario.usuario);
                             formdata.append("pass", app.usuario.password);
+                            formdata.append("rol", app.usuario.rol);
 
                             if (this.accion == 'crear') {
                                 axios.post("funciones/admin.php?accion=crearUsuario", formdata)
@@ -431,6 +445,7 @@ session_start();
                         this.usuario.provincia = null;
                         this.usuario.localidad = null;
                         this.usuario.usuario = null;
+                        this.usuario.rol = 'residencia';
                         this.usuario.password = null;
                     },
                     estaOrdenadoAscendentemente(atributo) {
@@ -497,6 +512,7 @@ session_start();
                         this.usuario.localidad = dato.residencia.split(' - ')[1];
                         this.usuario.usuario = dato.usuario;
                         this.usuario.password = dato.pass;
+                        this.usuario.rol = dato.rol;
                     },
                     getDatos() {
                         this.buscando = true;

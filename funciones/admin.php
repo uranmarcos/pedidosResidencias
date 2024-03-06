@@ -33,7 +33,8 @@
             $localidad = $_POST["localidad"];
             $usuario = $_POST["usuario"];
             $pass = $_POST['pass'];
-            $data = "'" . $provincia . "', '" . $localidad . "', '" . $usuario . "', '" . $pass . "'";
+            $rol = $_POST['rol'];
+            $data = "'" . $provincia . "', '" . $localidad . "', '" . $usuario . "', '" . $pass . "', '" . $rol .  "'";
             
             $u = $user -> insertar("usuarios", $data);
         
@@ -52,8 +53,9 @@
             $localidad = $_POST["localidad"];
             $usuario = $_POST["usuario"];
             $pass = $_POST['pass'];
+            $rol = $_POST['rol'];
             
-            $u = $user -> editarUsuario($id, $provincia, $localidad, $usuario, $pass);
+            $u = $user -> editarUsuario($id, $provincia, $localidad, $usuario, $pass, $rol);
         
             if ($u || $u == true) {
                 $res["error"] = false;
