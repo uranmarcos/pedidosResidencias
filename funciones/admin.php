@@ -96,6 +96,40 @@
 
         break;   
 
+        case 'crearArticulo':
+            $descripcion = $_POST["descripcion"];
+            $categoria = $_POST["categoria"];
+            $data = "'" . $descripcion . "', '" . $categoria . "'";
+            
+            
+            $u = $user -> insertar("articulos", $data);
+        
+            if ($u) {
+                $res["error"] = false;
+                $res["mensaje"] = "El articulo se guardó correctamente";
+            } else {
+                $res["mensaje"] = "No se pudo guardar El articulo. Intente nuevamente";
+                $res["error"] = true;
+            } 
+        break;
+        
+        case 'editarArticulo':
+            $id = $_POST['id'];
+            $descripcion = $_POST["descripcion"];
+            $categoria = $_POST["categoria"];
+            
+            $u = $user -> editarArticulo($id, $descripcion, $categoria);
+        
+            if ($u || $u == true) {
+                $res["error"] = false;
+                $res["mensaje"] = "El articulo se guardó correctamente";
+            } else {
+                $res["mensaje"] = "No se pudo guardar el articulo. Intente nuevamente";
+                $res["error"] = true;
+            } 
+
+        break;   
+
     }
     echo json_encode($res);
 

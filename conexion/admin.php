@@ -21,7 +21,8 @@ class ApptivaDB {
     public function getDatos($opcion) { 
         try {
             if ($opcion == 'articulos') {
-                $resultado = $this->conexion->query("SELECT a.id AS id, a.descripcion AS descripcion, c.descripcion AS categoria FROM articulos a INNER JOIN categorias c ON a.categoria = c.id ORDER BY c.descripcion, a.descripcion") or die();
+                //$resultado = $this->conexion->query("SELECT a.id AS id, a.descripcion AS descripcion, c.descripcion AS categoria FROM articulos a INNER JOIN categorias c ON a.categoria = c.id ORDER BY c.descripcion, a.descripcion") or die();
+                $resultado = $this->conexion->query("SELECT id, descripcion, categoria FROM articulos ORDER BY categoria, descripcion") or die();
             } else if ($opcion == 'pedidos') {
                 $resultado = $this->conexion->query("SELECT id, residencia, voluntario, fecha FROM pedidos") or die();
             } else if ($opcion == 'residencias') {
@@ -84,6 +85,22 @@ class ApptivaDB {
         try {
             $stmt = $this->conexion->prepare("UPDATE categorias SET descripcion = ? WHERE id = ?");
             $stmt->bind_param("si", $descripcion, $id);
+            if (!$stmt->execute()) {
+                return false;
+                // Manejo de errores
+                die("Error al ejecutar la actualización: " . $stmt->error);
+            }
+            return true;
+        } catch (\Throwable $th) {
+            // return $th;
+            return false;
+        }
+    }
+
+    public function editarArticulo($id, $descripcion, $categoria) {
+        try {
+            $stmt = $this->conexion->prepare("UPDATE articulos SET descripcion = ?, categoria = ? WHERE id = ?");
+            $stmt->bind_param("ssi", $descripcion, $categoria, $id);
             if (!$stmt->execute()) {
                 return false;
                 // Manejo de errores
