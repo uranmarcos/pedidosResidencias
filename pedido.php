@@ -41,8 +41,8 @@ session_start();
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
         <link href="css/home.css" rel="stylesheet"> 
         <link href="css/notificacion.css" rel="stylesheet"> 
-        <!-- <link href="css/modal.css" rel="stylesheet"> 
-        <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
+        <link href="css/modal.css" rel="stylesheet"> 
+        <!-- <script src="funciones/pdf.js" crossorigin="anonymous"></script> -->
     </head>
     <body>
         <div id="app">
@@ -56,6 +56,29 @@ session_start();
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->            
+
+                <!-- START DATOS ENVIO -->
+                <div class="col-12 datosEnvio p-0" v-if="!modalDatosEnvio">
+                    <div class="row">
+                        <span class="col-12 col-md-4">
+                            Voluntario: <b>{{envio.apellido}}, {{envio.nombre}}</b> 
+                        </span>
+                        <span class="col-12 col-md-4">
+                            Residencia: <b>{{envio.residencia}}</b>
+                        </span>
+                        <span class="col-6 col-md-2">    
+                            Casa: <b>{{envio.casa}}</b>
+                        </span>
+                        <span class="col-6 col-md-2 d-flex justify-content-end">    
+                            <span @click="modalDatosEnvio = true" class="btnEditar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                                </svg>
+                            </span>
+                        </span> 
+                    </div>
+                </div>
+                <!-- END DATOS ENVIO -->  
 
 
                 <div class="col-12">
@@ -71,7 +94,7 @@ session_start();
                     
                     <div v-else>
                         <div v-if="articulos.length != 0" class="row contenedorPlanficaciones d-flex justify-content-around">
-                            <table class="table">
+                            <table class="table mb-0 ">
                                 <thead>
                                     <tr class="trHead">
                                         <th scope="col">Categoria</th>
@@ -82,18 +105,21 @@ session_start();
                                 <tbody>
                                     <div>
                                         <tr v-for="articulo in articulos">
-                                            <td>{{articulo.id}}</td>
-                                            <td>{{articulo.descripcion}}</td>
-                                            <td>{{articulo.cantidad}}</td>
-                                            <td class="py-0">
+                                            <td>{{categorias.filter(e => e.id == articulo.categoria)[0].descripcion.toUpperCase()}}</td>
+                                            <td>{{articulo.descripcion.toUpperCase()}} ({{articulo.medida}})</td>
+                                            <td>
+                                                <input
+                                                    type="number" 
+                                                    @keydown="limitarDigitos(articulo.cantidad, event)"
+                                                    v-model="articulo.cantidad"
+                                                >
                                                 <button 
                                                     type="button" 
-                                                    class="btn botonSmallEye" 
-                                                    @click="verPedido(pedido.id)" 
+                                                    class="btnDelete" 
+                                                    @click="articulo.cantidad = null" 
                                                 >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
                                                     </svg>
                                                 </button>
                                             </td>
@@ -101,6 +127,26 @@ session_start();
                                     </div>
                                 </tbody>
                             </table>
+                            <div class="botonesFooter row d-flex justify-content-between">                                
+                                <button type="button" @click="modalVerPedido= true" class="col-12 col-md-6 botonFooter">
+                                    VER PEDIDO
+                                </button>
+                                
+                                <button type="button" class="col-12 col-md-6 botonFooter">
+                                    GENERAR PEDIDO
+                                </button>
+
+                                <!-- <button 
+                                    class="btn boton"
+                                    v-if="confirmando" 
+                                >
+                                    <div class="confirmando">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </button> -->
+                            </div>
                         </div> 
                             <div class="contenedorTabla" v-else>         
                                 <span class="sinResultados">
@@ -135,6 +181,108 @@ session_start();
                     </svg>
                 </span>
 
+                <!-- START MODAL DATOS ENVIO  -->
+                <div v-if="modalDatosEnvio">
+                    <div id="myModal" class="modal">
+                        <div class="modal-content p-0">
+                            <div class="modal-header  d-flex justify-content-center">
+                                <h5 class="modal-title" id="ModalLabel">
+                                    DATOS DE ENVIO
+                                </h5>
+                            </div>
+                            <div class="modal-body bodyModal row d-flex justify-content-center">
+                                <div class="col-11 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Residencia
+                                        </label>
+                                        <input class="form-control" disabled v-model="envio.residencia">
+                                    </div>
+                                </div>
+
+                                <div class="col-11 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Casa
+                                        </label>
+                                        <input class="form-control" disabled v-model="envio.casa">
+                                    </div>
+                                </div>
+
+                                <div class="col-11 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Nombre Voluntario(*)
+                                            <span class="errorLabel" v-if="errorNombre">Requerido</span>
+                                        </label>
+                                        <input class="form-control" v-model="envio.nombre">
+                                    </div>
+                                </div>
+
+                                <div class="col-11 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Apellido Voluntario(*)
+                                            <span class="errorLabel" v-if="errorApellido">Requerido</span>
+                                        </label>
+                                        <input class="form-control" v-model="envio.apellido">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer d-flex justify-content-center">                                
+                                <button type="button" @click="aceptarDatosEnvio()" class="btn boton botonResponsive">
+                                    ACEPTAR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+                <!-- END MODAL DATOS ENVIO-->
+
+                <!-- START MODAL VER PEDIDO  -->
+                <div v-if="modalVerPedido">
+                    <div id="myModal" class="modal">
+                        <div class="modal-content p-0">
+                            <div class="modal-header  d-flex justify-content-center">
+                                <h5 class="modal-title" id="ModalLabel">
+                                    ARTICULOS SELECCIONADOS
+                                </h5>
+                            </div>
+                            <div class="modal-body bodyModal bodyModalVerPedido row d-flex justify-content-center">
+
+                                <span v-for="articulo in articulos" style="height: 20px">
+                                    <span v-if="articulo.cantidad != null"  class="itemListado">
+                                        {{articulo.descripcion}} : {{articulo.cantidad}} 
+                                        <span class="unidadItemListado">
+                                            {{articulo.medida}}
+                                        </span>
+                                    </span>
+                                </span>
+                                <!-- <div class="col-11 mt-3">
+                                    <div class="row rowCategoria d-flex justify-space-around">
+                                        <label for="nombre" class="labelCategoria">
+                                            Nombre Voluntario(*)
+                                            <span class="errorLabel" v-if="errorNombre">Requerido</span>
+                                        </label>
+                                        <input class="form-control" v-model="envio.nombre">
+                                    </div>
+                                </div> -->
+
+                            </div>
+
+                            <div class="modal-footer d-flex justify-content-around">                                
+                                <button type="button" @click="modalVerPedido = false" class="btn boton botonResponsive">
+                                    CERRAR
+                                </button>
+                                <button type="button" @click="aceptarDatosEnvio()" class="btn boton botonResponsive">
+                                    PEDIR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+                <!-- END MODAL ENVIO-->
             </div>
             
         </div>
@@ -174,23 +322,97 @@ session_start();
             }
         </style>
         <style scoped>
-            .limpiezaPedidos{
-                color: grey;
-                font-size: 12px;
+            .unidadItemListado{
+                font-size: 12px !important;
             }
-            .atencionLimpieza{
-                color: rgb(238, 100, 100);
-                font-size: 13px;
-            }
-            .botonLimpiar{
-                height: 25px;
-                color: rgb(238, 100, 100);
-                border: solid 1px rgb(238, 100, 100);
-                background: white;
-            }
-            .botonLimpiar:hover{
+            .itemListado {
+                font-size: 16px;
+                z-index: 5;
+                font-family: verdana;
+                height: 20px;
                 color: white;
-                background: rgb(238, 100, 100);
+                text-transform: uppercase
+            }
+            .itemListado:before {
+                content: '✓';
+            } 
+            .bodyModalVerPedido{
+                width: 100%;
+                margin: auto;
+                background-image:  url("./img/pizarron.jpg");
+                background-repeat: no-repeat;
+                background-size:cover;
+                background-position: center;
+                min-height: 200px;
+                color: white;
+                font-family: chalkduster;
+            }
+            thead{
+                color:  #7C4599;
+            }
+            .botonesFooter{
+                width: 100%;
+                padding: 0;
+                margin:0 auto;
+            }
+            .botonFooter{
+                height: 40px;
+                padding: 0;
+                color:  #7C4599;
+                font-weight: bolder;
+                background: white;
+                border: none;
+            }
+            .botonFooter:hover{
+                border-bottom: solid 1px #7C4599;
+            }
+            .btnEditar{
+                margin-right: 10px;
+                color:  #7C4599;
+            }
+            .btnEditar:hover{
+                cursor: pointer;
+            }
+            .datosEnvio{
+                padding: 10px !important;
+                border-radius: 5px;
+                border: solid 1px grey;
+            }
+            /* ELIMINO BOTONES DEL INPUT NUMERICO */
+            /* Para Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Para Firefox */
+            input[type=number] {
+                -moz-appearance: textfield;
+            }
+            .btnDelete{
+                margin-left: 10px;
+                color: rgb(238, 100, 100);;
+                background: none;
+                border: none;
+            }
+            .btnDelete:hover {
+                color: rgb(254, 70, 70);
+            }
+            input{
+                width: 60px;
+                height: 30px;
+                border-radius: 5px;
+                text-align: center;
+            }
+            input:focus{
+                outline: none !important;
+                background-color: #eacdfa;
+            }
+            input.form-control{
+                height:40px;
+                border-radius: 5px;
+                text-align: center;
             }
             .categoria{
                 font-size: 0.8em;
@@ -267,15 +489,11 @@ session_start();
             }    
             .table{
                 font-size: 14px;
-                text-align: center
+                text-align: center;
+                color: #4F4E4E;
             }
             tr{
                 border: solid 1px lightgrey;
-            }
-            .observacion{
-                font-size: 12px;
-                padding-left: 0px;
-                color: grey;
             }
         </style>
         <script>
@@ -290,10 +508,21 @@ session_start();
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,
+                    modalDatosEnvio: false,
+                    envio: {
+                        residencia: null,
+                        casa: null,
+                        nombre: null,
+                        apellido: null
+                    },
+                    errorNombre: false,
+                    errorApellido: false,
+                    modalVerPedido: false
                 },
                 mounted () {
                     this.getCategorias();
                     this.getDatos();
+                    // this.modalDatosEnvio = true;
                 },
                 beforeUpdate(){
                     window.onscroll = function (){
@@ -302,6 +531,32 @@ session_start();
                     }
                 },
                 methods:{
+                    resetErrores () {
+                        this.errorNombre = false;
+                        this.errorApellido = false;
+                    },
+                    aceptarDatosEnvio () {
+                        this.resetErrores();
+                        let validacion = true;
+                        if (!this.envio.nombre || (this.envio.nombre && this.envio.nombre.trim() == '')) {
+                            this.errorNombre = true;
+                            validacion = false;
+                        }
+                        if (!this.envio.apellido || (this.envio.apellido && this.envio.apellido.trim() == '')) {
+                            this.errorApellido = true;
+                            validacion = false;
+                        }
+                        if (validacion) {
+                            this.modalDatosEnvio = false;
+                        }
+
+                    },
+                    limitarDigitos (param, event) {
+                        var teclasPermitidas = [8, 46, 37, 39];
+                        if (param && param.length >= 4 && teclasPermitidas.indexOf(event.keyCode) === -1) {
+                            event.preventDefault();
+                        }
+                    },
                     irA (destino) {
                         switch (destino) {
                             case "admin":
@@ -323,6 +578,10 @@ session_start();
                             } else {
                                 if (response.data.pedidos != false) {
                                     app.articulos = response.data.pedidos;
+                                    app.articulos.forEach(element => {
+                                        // element.cantidad = null
+                                        app.$set(element, 'cantidad', null);
+                                    });
                                 } else {
                                     app.articulos = []
                                 }

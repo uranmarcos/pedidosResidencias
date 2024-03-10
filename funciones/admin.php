@@ -32,9 +32,11 @@
             $provincia = $_POST["provincia"];
             $localidad = $_POST["localidad"];
             $usuario = $_POST["usuario"];
-            $pass = $_POST['pass'];
+            // $pass = $_POST['pass'];
+            $pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
             $rol = $_POST['rol'];
-            $data = "'" . $provincia . "', '" . $localidad . "', '" . $usuario . "', '" . $pass . "', '" . $rol .  "'";
+            $casas = $_POST['casas'];
+            $data = "'" . $provincia . "', '" . $localidad . "', '" . $usuario . "', '" . $pass . "', '" . $rol . "', '" . $casas .  "'";
             
             $u = $user -> insertar("usuarios", $data);
         
@@ -52,10 +54,12 @@
             $provincia = $_POST["provincia"];
             $localidad = $_POST["localidad"];
             $usuario = $_POST["usuario"];
-            $pass = $_POST['pass'];
+            // $pass = $_POST['pass'];
+            $pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
             $rol = $_POST['rol'];
+            $casas = $_POST['casas'];
             
-            $u = $user -> editarUsuario($id, $provincia, $localidad, $usuario, $pass, $rol);
+            $u = $user -> editarUsuario($id, $provincia, $localidad, $usuario, $pass, $rol, $casas);
         
             if ($u || $u == true) {
                 $res["error"] = false;

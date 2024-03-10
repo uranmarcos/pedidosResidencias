@@ -122,7 +122,7 @@ session_start();
                                             <!-- <td>{{dato.id}}</td> -->
                                             <td>{{dato.residencia}}</td>
                                             <td>{{dato.usuario}}</td>
-                                            <td>{{dato.pass}}</td>
+                                            <td>{{dato.casas}}</td>
                                             <td>
                                                 <span @click="editar(dato)" class="btnEditar">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -188,18 +188,34 @@ session_start();
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 mt-1">
-                                    <div class="row rowCategoria d-flex justify-space-around">
-                                        <label for="nombre" class="labelCategoria">
-                                            Rol(*)
-                                        </label>
-                                        <select class="form-control" v-model="usuario.rol">
-                                            <option v-for="rol in roles" :value="rol">{{rol}}</option>
-                                        </select>
+                                <div class="row my-0 mx-0 px-0 d-flex justify-content-between">
+                                    <div class="mt-1" :class="usuario.rol == 'residencia' ? 'col-8' : 'col-12'">
+                                        <div class="row rowCategoria d-flex justify-space-around">
+                                            <label for="nombre" class="labelCategoria">
+                                                Rol(*)
+                                            </label>
+                                            <select class="form-control" v-model="usuario.rol">
+                                                <option v-for="rol in roles" :value="rol">{{rol}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3 mt-1" v-if="usuario.rol == 'residencia'">
+                                        <div class="row rowCategoria d-flex justify-space-around">
+                                            <label for="nombre" class="labelCategoria">
+                                                Casas(*)
+                                            </label>
+                                            <select class="form-control" v-model="usuario.casas">
+                                                <option :value="1">1</option>
+                                                <option :value="2">2</option>
+                                                <option :value="3">3</option>
+                                                <option :value="4">4</option>
+                                                <option :value="5">5</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="col-sm-12 mt-1">
+                                <div class="col-sm-12 mt-1" v-if="accion == 'crear'">
                                     <div class="row rowCategoria d-flex justify-space-around">
                                     <label for="nombre" class="labelCategoria">Contraseña</label>
                                         <input class="form-control" disabled v-model="usuario.password">
@@ -264,7 +280,7 @@ session_start();
                 data: {
                     buscando: false,
                     datos: [],
-                    columnas: ['RESIDENCIA', 'USUARIO', 'PASSWORD', ''],
+                    columnas: ['RESIDENCIA', 'USUARIO', 'CASAS', ''],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,
@@ -294,17 +310,20 @@ session_start();
                         "Santa Fe",
                         "Santiago del Estero",
                         "Tierra del Fuego",
-                        "Tucumán"
+                        "Tucumán",
+                        "GENERAL"
                     ],
                     errorProvincia: false,
                     errorLocalidad: false,
                     errorUsuario: false,
+                    errorCasas: false,
                     usuario: {
                         id: null,
                         provincia: null,
                         localidad: null,
                         usuario: null,
-                        rol: 'residencia'
+                        rol: 'residencia',
+                        casas: 1
                     },
                     confirmando: false,
                     roles: [
@@ -402,10 +421,18 @@ session_start();
                             formdata.append("usuario", app.usuario.usuario);
                             formdata.append("pass", app.usuario.password);
                             formdata.append("rol", app.usuario.rol);
+                            formdata.append("casas", app.usuario.casas);
+
+                            if (app.usuario.rol != 'residencia') {
+                                formdata.append("casas", 0);
+                            }
+
+
 
                             if (this.accion == 'crear') {
                                 axios.post("funciones/admin.php?accion=crearUsuario", formdata)
                                 .then(function(response){
+                                    console.log(response);
                                     if (response.data.error) {
                                         app.mostrarToast("Error", response.data.mensaje);
                                     } else {
@@ -446,7 +473,8 @@ session_start();
                         this.usuario.localidad = null;
                         this.usuario.usuario = null;
                         this.usuario.rol = 'residencia';
-                        this.usuario.password = null;
+                        // this.usuario.password = null;
+                        this.usuario.casas = 1;
                     },
                     estaOrdenadoAscendentemente(atributo) {
                         for (let i = 1; i < this.datos.length; i++) {
@@ -511,7 +539,7 @@ session_start();
                         this.usuario.provincia = dato.residencia.split(' - ')[0];
                         this.usuario.localidad = dato.residencia.split(' - ')[1];
                         this.usuario.usuario = dato.usuario;
-                        this.usuario.password = dato.pass;
+                        // this.usuario.password = dato.pass;
                         this.usuario.rol = dato.rol;
                     },
                     getDatos() {
@@ -520,6 +548,7 @@ session_start();
                         formdata.append("opcion", 'usuarios');
                         axios.post("funciones/admin.php?accion=getDatos", formdata)
                         .then(function(response){ 
+                            console.log(response);
                             app.buscando = false;
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);

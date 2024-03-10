@@ -147,8 +147,8 @@ session_start();
                 </div>
                 <!-- END TABLA -->
 
-                 <!-- START MODAL  -->
-                 <div v-if="modal">
+                <!-- START MODAL  -->
+                <div v-if="modal">
                     <div id="myModal" class="modal">
                         <div class="modal-content p-0">
                             <div class="modal-header  d-flex justify-content-center">
@@ -344,7 +344,6 @@ session_start();
                         this.accion = accion;
                     },
                     editar (dato) {
-                        console.log(dato);
                         this.modal = true;
                         this.accion = 'editar';
                         this.articulo.id = dato.id;
