@@ -24,7 +24,7 @@
 
                 <div class="contenedorLogo">
                     <img 
-                        src="img/logo.png" 
+                        src="img/si.jpg"
                         alt="logo"  
                     >
                 </div>
@@ -231,21 +231,20 @@
                 showPasword: false
             },
             mounted () {
-                let usuarioRecordardo = localStorage.getItem("usuario");
-                this.password = "";
-                if (usuarioRecordardo) {
-                    this.usuario = usuarioRecordardo;
+                let usuarioRecordado = localStorage.getItem("usuarioPedidosResidencias");
+                if (usuarioRecordado) {
+                    this.usuario = usuarioRecordado.replaceAll('"', '');
                     this.recordar = true;
                 }
                 if (!this.recordar) {
-                    localStorage.removeItem("usuario");
+                    localStorage.removeItem("usuarioPedidosResidencias");
                     this.usuario = "";
                 }
             },
             methods:{
                 changeRecordar () {
                     this.recordar = !this.recordar;
-                    localStorage.removeItem("usuario");
+                    localStorage.removeItem("usuarioPedidosResidencias");
                 },
                 changeType () {
                     this.showPasword = !this.showPasword
@@ -276,6 +275,9 @@
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
                             } else {
+                                if (app.recordar) {
+                                    localStorage.setItem("usuarioPedidosResidencias", JSON.stringify(app.usuario))
+                                }
                                 window.location.href = 'home.php'; 
                             }
                             app.loading = false;
