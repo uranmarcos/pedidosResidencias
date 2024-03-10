@@ -13,8 +13,19 @@
     </div>
 </div>
 <script>
+    
     function cerrarSesion() {
-        window.location.href = 'funciones/cerrarSesion.php';   
+        axios.post("funciones/login.php?accion=logout")
+        .then(function(response){
+            if (response.data.error) {
+                app.mostrarToast("Error", response.data.mensaje);
+            } else {
+                window.location.href = 'index.html'; 
+            }  
+        }).catch( error => {
+            app.loading = false;
+            app.mostrarToast("Error", "Hubo un error. Intente nuevamente.");
+        })
     }
     function irA () {
         window.location.href = 'home.php';        

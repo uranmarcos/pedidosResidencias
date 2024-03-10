@@ -1,9 +1,11 @@
 <?php
 session_start();
-// $rol = "usuario";
-// if (!$_SESSION["login"]) {
-//     header("Location: index.html");
-// }
+if (!$_SESSION["login"]) {
+    header("Location: index.html");
+}
+
+$rol = $_SESSION["rol"];
+$usuario = $_SESSION["usuario"];
 
 // if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
 //     header("Location: home.php");
@@ -55,28 +57,23 @@ session_start();
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Usuarios </span>
+                        <div class="col-12 col-md-6 p-0">
+                            <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Usuarios </span>
+                        </div>    
+                        <div class="col-12 col-md-6 p-0 d-flex spanUsuario justify-content-end">
+                            <span> {{usuario}} </span>
+                        </div>    
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
 
                 <!-- START OPCIONES -->
-                <div class="row p-0 contenedorOpciones mt-6">
-                    <button class="col-3 selected opciones" @click="irA('usuarios')">
-                        Usuarios
-                    </button>
-                    
-                    <button class="col-3 opciones" @click="irA('categorias')">
-                        Categorias
-                    </button>
-                    
-                    <button class="col-3 opciones" @click="irA('articulos')">
-                        Articulos
-                    </button>
-
-                    <button class="col-3 opciones" @click="irA('pedidos')">
-                        Pedidos
-                    </button>
+                <div class="row p-0 contenedorOpciones mt-3">
+                    <div v-for="opcion in opciones" class="col-3 contenedorOpcion">
+                        <button class="opcion" :class="opcion == 'Usuarios' ? 'selected' : ''" @click="irA(opcion.toLowerCase())">
+                            {{opcion}}
+                        </button>
+                    </div>
                 </div>
                 <!-- END OPCIONES -->
 
@@ -331,9 +328,19 @@ session_start();
                         "residencia",
                         "admin",
                         "master"
-                    ]
+                    ],
+                    rol: null,
+                    usuario: null,
+                    opciones: [
+                        "Usuarios",
+                        "Categorias",
+                        "Articulos",
+                        "Pedidos"
+                    ] 
                 },
                 mounted () {
+                    this.rol = "<?php echo $rol; ?>";
+                    this.usuario = "<?php echo $usuario; ?>";
                     this.getDatos();
                 },
                 beforeUpdate(){

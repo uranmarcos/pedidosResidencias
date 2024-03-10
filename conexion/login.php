@@ -23,7 +23,7 @@ class ApptivaDB {
             $stmt = $this->conexion->prepare("SELECT provincia, localidad, usuario, rol, pass FROM usuarios WHERE usuario = ?");
             $stmt->bind_param('s', $usuario);
             $stmt->execute();
-            $stmt->bind_result($provincia, $localidad, $rol, $pass);
+            $stmt->bind_result($provincia, $localidad, $usuario, $rol, $pass);
             
             $result = array();
             while ($stmt->fetch()) {

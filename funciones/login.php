@@ -87,6 +87,17 @@
             // }
         break;
 
+        case 'logout':
+            try {
+                session_destroy();
+                $res["mensaje"] = "OK";
+                $res["error"] = false;
+            } catch (\Throwable $th) {
+                $res["mensaje"] = "Hubo un error. Intente nuevamente";
+                $res["error"] = false;
+            }
+        break;
+
         default:
             # code...
             break;

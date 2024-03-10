@@ -1,5 +1,11 @@
 <?php
 session_start();
+if (!$_SESSION["login"]) {
+    header("Location: index.html");
+}
+
+$rol = $_SESSION["rol"];
+$usuario = $_SESSION["usuario"];
 // $rol = "usuario";
 // if (!$_SESSION["login"]) {
 //     header("Location: index.html");
@@ -55,28 +61,25 @@ session_start();
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="mx-2 grey"> Admin </span>
+                        <div class="col-12 col-md-6 p-0">
+                            <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="mx-2 grey"> Admin </span>
+                        </div>
+                        <div class="col-12 col-md-6 p-0 spanUsuario d-flex justify-content-end">
+                            <span>
+                                {{usuario}}    
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
 
                 <!-- START OPCIONES -->
-                <div class="row p-0 contenedorOpciones mt-6">
-                    <button class="col-3 opciones" @click="irA('usuarios')">
-                        Usuarios
-                    </button>
-                    
-                    <button class="col-3 opciones" @click="irA('categorias')">
-                        Categorias
-                    </button>
-                    
-                    <button class="col-3 opciones" @click="irA('articulos')">
-                        Articulos
-                    </button>
-
-                    <button class="col-3 opciones" @click="irA('pedidos')">
-                        Pedidos
-                    </button>
+                <div class="row p-0 contenedorOpciones mt-3">
+                    <div v-for="opcion in opciones" class="col-3 contenedorOpcion">
+                        <button class="opcion" @click="irA(opcion.toLowerCase())">
+                            {{opcion}}
+                        </button>
+                    </div>
                 </div>
                 <!-- END OPCIONES -->
             </div>
@@ -88,8 +91,18 @@ session_start();
                 components: {                
                 },
                 data: {
+                    rol: null,
+                    usuario: null,
+                    opciones: [
+                        "Usuarios",
+                        "Categorias",
+                        "Articulos",
+                        "Pedidos"
+                    ]
                 },
                 mounted () {
+                    this.rol = "<?php echo $rol; ?>";
+                    this.usuario = "<?php echo $usuario; ?>";
                 },
                 beforeUpdate(){
                     window.onscroll = function (){

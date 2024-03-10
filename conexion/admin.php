@@ -36,6 +36,16 @@ class ApptivaDB {
         }
     }
 
+    public function getPedidos() {
+        try {
+            $resultado = $this->conexion->query("SELECT * FROM pedidos") or die();
+
+            return $resultado->fetch_all(MYSQLI_ASSOC);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
     public function insertar($tabla, $datos) {
         try {
             $resultado = $this->conexion->query("INSERT INTO $tabla VALUES(null, $datos)") or die();

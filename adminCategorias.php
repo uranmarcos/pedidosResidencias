@@ -1,9 +1,11 @@
 <?php
 session_start();
-// $rol = "usuario";
-// if (!$_SESSION["login"]) {
-//     header("Location: index.html");
-// }
+if (!$_SESSION["login"]) {
+    header("Location: index.html");
+}
+
+$rol = $_SESSION["rol"];
+$usuario = $_SESSION["usuario"];
 
 // if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
 //     header("Location: home.php");
@@ -61,22 +63,12 @@ session_start();
                 <!-- END BREADCRUMB -->
 
                 <!-- START OPCIONES -->
-                <div class="row p-0 contenedorOpciones mt-6">
-                    <button class="col-3 opciones" @click="irA('usuarios')">
-                        Usuarios
-                    </button>
-                    
-                    <button class="col-3 selected opciones" @click="irA('categorias')">
-                        Categorias
-                    </button>
-                    
-                    <button class="col-3 opciones" @click="irA('articulos')">
-                        Articulos
-                    </button>
-
-                    <button class="col-3 opciones" @click="irA('pedidos')">
-                        Pedidos
-                    </button>
+                <div class="row p-0 contenedorOpciones mt-3">
+                    <div v-for="opcion in opciones" class="col-3 contenedorOpcion">
+                        <button class="opcion" :class="opcion == 'Categorias' ? 'selected' : ''" @click="irA(opcion.toLowerCase())">
+                            {{opcion}}
+                        </button>
+                    </div>
                 </div>
                 <!-- END OPCIONES -->
 
@@ -180,15 +172,6 @@ session_start();
                                     </div>
                                 </button>
                             </div>
-
-                            <!-- <div class="modal-body row d-flex justify-content-center">
-                                <div class="col-sm-12 mt-3 d-flex justify-content-center">
-                                    ¿Desea eliminar {{perfil == 'biblioteca' ? 'el libro' : perfil == 'recursos' ? 'el recurso' : 'la planificación'}}
-                                </div>
-                                <div class="col-sm-12 mt-3 d-flex justify-content-center">
-                                    <b> {{objetoEliminable.nombre}}</b> ?    
-                                </div>                             
-                            </div> -->
                         </div>
                     </div>
                 </div>    
@@ -231,9 +214,19 @@ session_start();
                     },
                     errorDescripcion: false,
                     accion: null,
-                    confirmando: false
+                    confirmando: false,
+                    rol: null,
+                    usuario: null,
+                    opciones: [
+                        "Usuarios",
+                        "Categorias",
+                        "Articulos",
+                        "Pedidos"
+                    ] 
                 },
                 mounted () {
+                    this.rol = "<?php echo $rol; ?>";
+                    this.usuario = "<?php echo $usuario; ?>";
                     this.getDatos();
                 },
                 beforeUpdate(){

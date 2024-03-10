@@ -1,16 +1,15 @@
 <?php
 session_start();
-// $rol = "usuario";
-// if (!$_SESSION["login"]) {
-//     header("Location: index.html");
-// }
+
+if (!$_SESSION["login"]) {
+    header("Location: index.html");
+}
+$rol = $_SESSION["rol"];
+$usuario = $_SESSION["usuario"];
 
 // if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
 //     header("Location: home.php");
 // }
-var_dump($_SESSION);
-$rol = $_SESSION["rol"];
-$usuario = $_SESSION["usuario"];
 // if ($_SESSION["rol"] == "admin" ) {
 //     $rol = "admin";
 // }
@@ -54,9 +53,14 @@ $usuario = $_SESSION["usuario"];
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irAHome()">Inicio</span>  -  <span class="mx-2 grey"> Pedidos realizados </span>
-
-                        <span class="d-flex justify-end"> {{usuario}} </span>
+                        <div class="col-12 col-md-6 p-0">
+                            <span class="pointer mx-2" @click="irAHome()">Inicio</span>  -  <span class="mx-2 grey"> Pedidos realizados </span>
+                        </div>
+                        <div class="col-12 col-md-6 p-0 spanUsuario d-flex justify-content-end">
+                            <span>
+                                {{usuario}}    
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
@@ -199,6 +203,10 @@ $usuario = $_SESSION["usuario"];
             }
             .selectResidencia{
                 width: 200px;
+            }
+            .spanUsuario{
+                font-size: 12px;
+                text-transform: lowerCase;
             }
         </style>
         <style scoped>
@@ -356,7 +364,7 @@ $usuario = $_SESSION["usuario"];
                         this.buscandoPedidos = true;
                         let formdata = new FormData();
 
-                        axios.post("funciones/acciones.php?accion=getPedidos", formdata)
+                        axios.post("funciones/admin.php?accion=getPedidos", formdata)
                         .then(function(response){ 
                             console.log(response);
                             app.buscandoPedidos = false;
