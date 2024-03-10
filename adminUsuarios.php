@@ -107,7 +107,7 @@ session_start();
                                 <tr class="trHead">
                                     <th scope="col" v-for="columna in columnas">
                                         {{columna}}
-                                        <button @click="ordenarTabla(columna)" v-if="columna == 'RESIDENCIA' || columna == 'USUARIO'">
+                                        <button @click="ordenarTabla(columna)" v-if="columna == 'RESIDENCIA' || columna == 'USUARIO' || columna == 'ROL'">
                                             ↑↓
                                         </button>
                                     </th>
@@ -122,7 +122,8 @@ session_start();
                                             <!-- <td>{{dato.id}}</td> -->
                                             <td>{{dato.residencia}}</td>
                                             <td>{{dato.usuario}}</td>
-                                            <td>{{dato.casas}}</td>
+                                            <td>{{dato.rol}}</td>
+                                            <td>{{dato.casas == 0 ? '-' : dato.casas}}</td>
                                             <td>
                                                 <span @click="editar(dato)" class="btnEditar">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -280,7 +281,7 @@ session_start();
                 data: {
                     buscando: false,
                     datos: [],
-                    columnas: ['RESIDENCIA', 'USUARIO', 'CASAS', ''],
+                    columnas: ['RESIDENCIA', 'USUARIO', 'ROL', 'CASAS', ''],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,
@@ -432,7 +433,6 @@ session_start();
                             if (this.accion == 'crear') {
                                 axios.post("funciones/admin.php?accion=crearUsuario", formdata)
                                 .then(function(response){
-                                    console.log(response);
                                     if (response.data.error) {
                                         app.mostrarToast("Error", response.data.mensaje);
                                     } else {
@@ -539,7 +539,6 @@ session_start();
                         this.usuario.provincia = dato.residencia.split(' - ')[0];
                         this.usuario.localidad = dato.residencia.split(' - ')[1];
                         this.usuario.usuario = dato.usuario;
-                        // this.usuario.password = dato.pass;
                         this.usuario.rol = dato.rol;
                     },
                     getDatos() {
@@ -548,7 +547,6 @@ session_start();
                         formdata.append("opcion", 'usuarios');
                         axios.post("funciones/admin.php?accion=getDatos", formdata)
                         .then(function(response){ 
-                            console.log(response);
                             app.buscando = false;
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);

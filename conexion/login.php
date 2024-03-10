@@ -20,7 +20,7 @@ class ApptivaDB {
 
     public function login($usuario, $password) { 
         try {
-            $stmt = $this->conexion->prepare("SELECT provincia, localidad, rol, pass FROM usuarios WHERE usuario = ?");
+            $stmt = $this->conexion->prepare("SELECT provincia, localidad, usuario, rol, pass FROM usuarios WHERE usuario = ?");
             $stmt->bind_param('s', $usuario);
             $stmt->execute();
             $stmt->bind_result($provincia, $localidad, $rol, $pass);
@@ -30,6 +30,7 @@ class ApptivaDB {
                 $result[] = array(
                     'provincia' => $provincia,
                     'localidad' => $localidad,
+                    'usuario' => $usuario,
                     'rol' => $rol,
                     'pass' => $pass
                 );

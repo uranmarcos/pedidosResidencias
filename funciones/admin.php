@@ -54,7 +54,6 @@
             $provincia = $_POST["provincia"];
             $localidad = $_POST["localidad"];
             $usuario = $_POST["usuario"];
-            // $pass = $_POST['pass'];
             $pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
             $rol = $_POST['rol'];
             $casas = $_POST['casas'];

@@ -8,7 +8,9 @@ session_start();
 // if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
 //     header("Location: home.php");
 // }
-
+var_dump($_SESSION);
+$rol = $_SESSION["rol"];
+$usuario = $_SESSION["usuario"];
 // if ($_SESSION["rol"] == "admin" ) {
 //     $rol = "admin";
 // }
@@ -53,6 +55,8 @@ session_start();
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
                         <span class="pointer mx-2" @click="irAHome()">Inicio</span>  -  <span class="mx-2 grey"> Pedidos realizados </span>
+
+                        <span class="d-flex justify-end"> {{usuario}} </span>
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
@@ -77,27 +81,6 @@ session_start();
             
 
                 <div class="row mt-6">
-                    <!-- START BREADCRUMB -->
-                    <div class="col-12 px-3" v-if="rol == 'superAdmin'">
-                        <div v-if="consultandoLimpieza" class="limpiezaPedidos">
-                            Verificando si existen pedidos para eliminar...
-                        </div>
-                        <div v-else class="atencionLimpieza">
-                            <div  class="atencionLimpieza px-2">
-                                {{pedidosALimpiar}} pedidos para limpiar  
-                                <button 
-                                    type="button" 
-                                    class="botonLimpiar" 
-                                    @click="limpiarPedidos" 
-                                    v-if="pedidosALimpiar != 0"
-                                >
-                                    Limpiar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END BREADCRUMB -->
-
 
                     <div class="col-12">
                         <!-- START COMPONENTE LOADING BUSCANDO pedidos -->
@@ -335,19 +318,17 @@ session_start();
                     tituloToast: null,
                     textoToast: null,
                     rol : null,
-                    pedidosALimpiar: null,
-                    consultandoLimpieza: false,
+                    usuario: null,
                     usuarioBuscado: null,
-                    usuarios: []
+                    usuarios: [],
                 },
                 mounted () {
+                    this.rol = "<?php echo $rol; ?>";
+                    this.usuario = "<?php echo $usuario; ?>";
                     this.getPedidos();
-                    this.getUsuarios();
-                    // this.rol = 
-                    //?php echo $rol; ?>";
-                    // if (this.rol == 'superAdmin'){
-                    //     this.existenPedidosParaEliminar();
-                    // }
+                    if (this.rol != 'residencia') {
+                        this.getUsuarios();
+                    }
                 },
                 beforeUpdate(){
                     window.onscroll = function (){
@@ -403,37 +384,6 @@ session_start();
                                 } else {
                                     app.usuarios = []
                                 }
-                            }
-                        });
-                    },
-                    existenPedidosParaEliminar () {
-                        this.consultandoLimpieza = true;
-                        axios.post("funciones/acciones.php?accion=consultandoLimpieza")
-                        .then(function(response){ 
-                            console.log(response.data);
-                            app.consultandoLimpieza = false;
-                            if (response.data.error) {
-                                app.mostrarToast("Error", response.data.mensaje);
-                            } else {
-                                app.pedidosALimpiar = response.data.cantidad;
-                                // if (response.data.cantidad != false) {
-                                // } else {
-                                //     app.pedidos = null
-                                // }
-                            }
-                        });
-                    },
-                    limpiarPedidos () {
-                        this.limpiandoPedidos = true;
-                        axios.post("funciones/acciones.php?accion=limpiarPedidos")
-                        .then(function(response){ 
-                            console.log(response.data);
-                            app.limpiandoPedidos = false;
-                            if (response.data.error) {
-                                app.mostrarToast("Error", response.data.mensaje);
-                            } else {
-                                app.mostrarToast("Éxito", "La limpieza se realizó correctamente");
-                                app.existenPedidosParaEliminar();
                             }
                         });
                     },

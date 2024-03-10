@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require("../conexion/login.php");
     $user = new ApptivaDB();
   
@@ -10,8 +11,13 @@
         $accion = $_GET["accion"];
     }
 
-    $_SESSION["login"] = false;
-    $_SESSION["rol"] = null;
+    // $_SESSION["login"] = false;
+    // $_SESSION["rol"] = null;
+    // $_SESSION["login"] = true;
+    // $_SESSION['login_time'] = time();
+    //                     $_SESSION["usuario"] = $u[0]["provincia"] . ", " . $u[0]["localidad"];
+    //                     $_SESSION["rol"] = $u[0]["rol"];
+
 
     switch ($accion) {
         case 'login':
@@ -27,7 +33,11 @@
                         // Inicio de sesión exitoso
                         $res["mensaje"] = "OK";
                         $res["error"] = false;
-                        $_SESSION["usuario"] = $u[0]["provincia"] . ", " . $u[0]["localidad"];
+                        $_SESSION["login"] = true;
+                        $_SESSION['login_time'] = time();
+                        $_SESSION["provincia"] = $u[0]["provincia"];
+                        $_SESSION["localidad"] = $u[0]["localidad"];
+                        $_SESSION["usuario"] = $u[0]["usuario"];
                         $_SESSION["rol"] = $u[0]["rol"];
                     } else {
                         // Contraseña incorrecta
