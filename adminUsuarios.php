@@ -63,7 +63,7 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                             <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Usuarios </span>
                         </div>    
                         <div class="col-12 col-md-6 p-0 d-flex spanUsuario justify-content-end">
-                            <span> {{usuario}} </span>
+                            <span> {{usuarioLogueado}} </span>
                         </div>    
                     </div>
                 </div>
@@ -332,7 +332,7 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                         "master"
                     ],
                     rol: null,
-                    usuario: null,
+                    usuarioLogueado: null,
                     opciones: [
                         "Usuarios",
                         "Categorias",
@@ -341,8 +341,8 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                     ] 
                 },
                 mounted () {
-                    this.rol = "<?php echo $rol; ?>";
-                    this.usuario = "<?php echo $usuario; ?>";
+                    this.rolLogueado = "<?php echo $rol; ?>";
+                    this.usuarioLogueado = "<?php echo $usuario; ?>";
                     this.getDatos();
                 },
                 beforeUpdate(){

@@ -84,6 +84,19 @@
 
         break;
 
+        case 'getUsuarios':
+            $u = $user -> getUsuarios();
+
+            if ($u || $u == []) { 
+                $res["usuarios"] = $u;
+                $res["mensaje"] = "La consulta se realizó correctamente";
+            } else {
+                $res["mensaje"] = "Hubo un error al recuperar la información. Por favor recargue la página.";
+                $res["error"] = true;
+            } 
+
+        break;
+
         case 'crearCategoria':
             $descripcion = $_POST["descripcion"];
             $data = "'" . $descripcion . "'";

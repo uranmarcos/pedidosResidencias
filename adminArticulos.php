@@ -3,9 +3,12 @@ session_start();
 if (!$_SESSION["login"]) {
     header("Location: index.html");
 }
-
 $rol = $_SESSION["rol"];
 $usuario = $_SESSION["usuario"];
+if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
+    header("Location: home.php");
+}
+
 // $rol = "usuario";
 // if (!$_SESSION["login"]) {
 //     header("Location: index.html");
@@ -61,7 +64,12 @@ $usuario = $_SESSION["usuario"];
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Articulos </span>
+                        <div class="col-12 col-md-6 p-0">
+                            <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Articulos </span>
+                        </div>    
+                        <div class="col-12 col-md-6 p-0 d-flex spanUsuario justify-content-end">
+                            <span> {{usuario}} </span>
+                        </div>    
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
@@ -116,7 +124,7 @@ $usuario = $_SESSION["usuario"];
                                     <tr v-for="dato in datos">
                                         <div>
                                             <div>
-                                                <td>{{dato.id}}</td>
+                                                <!-- <td>{{dato.id}}</td> -->
                                                 <td>{{categorias.filter(e => e.id == dato.categoria)[0].descripcion.toUpperCase()}}</td>
                                                 <td>{{dato.descripcion.toUpperCase()}} ({{dato.medida}})</td>
                                                 <td>
@@ -237,7 +245,7 @@ $usuario = $_SESSION["usuario"];
                 data: {
                     buscando: false,
                     datos: [],
-                    columnas: ['ID', 'CATEGORIA', 'DESCRIPCION'],
+                    columnas: ['CATEGORIA', 'DESCRIPCION'],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,

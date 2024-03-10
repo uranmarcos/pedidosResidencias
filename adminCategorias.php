@@ -59,7 +59,12 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                 <!-- START BREADCRUMB -->
                 <div class="col-12 p-0">
                     <div class="breadcrumb">
-                        <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Categorias </span>
+                        <div class="col-12 col-md-6 p-0">
+                            <span class="pointer mx-2" @click="irA('home')">Inicio</span>  -  <span class="pointer mx-2" @click="irA('admin')"> Admin </span> -  <span class="mx-2 grey"> Categorias </span>
+                        </div>    
+                        <div class="col-12 col-md-6 p-0 d-flex spanUsuario justify-content-end">
+                            <span> {{usuario}} </span>
+                        </div>    
                     </div>
                 </div>
                 <!-- END BREADCRUMB -->
@@ -109,7 +114,7 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                                 <div>
                                     <tr v-for="dato in datos">
                                         <div>
-                                            <td >{{dato.id}}</td>
+                                            <!-- <td >{{dato.id}}</td> -->
                                             <td >{{dato.descripcion.toUpperCase()}}</td> 
                                             <td>
                                                 <span @click="editar(dato)" class="btnEditar">
@@ -205,7 +210,7 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                 data: {
                     buscando: false,
                     datos: [],
-                    columnas: ['ID', 'DESCRIPCION'],
+                    columnas: ['DESCRIPCION', ''],
                     scroll: false,
                     tituloToast: null,
                     textoToast: null,

@@ -115,6 +115,16 @@ class ApptivaDB {
             return false;
         }
     }
+
+    public function getUsuarios() {
+        try {
+            $resultado = $this->conexion->query("SELECT id, localidad FROM usuarios ORDER BY localidad") or die();
+
+            return $resultado->fetch_all(MYSQLI_ASSOC);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 }
 
 ?>

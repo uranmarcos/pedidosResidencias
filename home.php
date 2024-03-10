@@ -68,12 +68,12 @@ $usuario = $_SESSION["usuario"];
                 <!-- START NAVEGADOR -->
                 <div class="col-12 p-0">
                     <div class="navegador">
-                        <select class="form-control selectResidencia" @change="page= 1, getPedidos()" v-model="usuarioBuscado">
+                        <select class="form-control selectResidencia" @change="page= 1, getPedidos()" v-model="usuarioBuscado" v-if="rol == 'admin' || rol == 'master'">
                             <option value="0" >Todos los usuarios</option>
                             <option v-for="usuario in usuarios" v-bind:value="usuario.id" >{{usuario.localidad}}</option>
                         </select>
 
-                        <button class="button mr-2" @click="irA('admin')">
+                        <button class="button mr-2" @click="irA('admin')"  v-if="rol == 'admin' || rol == 'master'">
                             Admin
                         </button>
                         <button class="button"  @click="irA('pedido')">
@@ -103,7 +103,7 @@ $usuario = $_SESSION["usuario"];
                                 <table class="table">
                                     <thead>
                                         <tr class="trHead">
-                                            <th scope="col">Número</th>
+                                            <!-- <th scope="col">Número</th> -->
                                             <th scope="col">Voluntario</th>
                                             <th scope="col">Residencia</th>
                                             <th scope="col">Fecha</th>
@@ -113,7 +113,7 @@ $usuario = $_SESSION["usuario"];
                                     <tbody>
                                         <div>
                                             <tr v-for="pedido in pedidos">
-                                                <td>{{pedido.id}}</td>
+                                                <!-- <td>{{pedido.id}}</td> -->
                                                 <td>{{pedido.voluntario}}</td>
                                                 <td>{{pedido.residencia}}</td>
                                                 <td>{{formatearFecha(pedido.fecha)}}</td>
@@ -183,20 +183,24 @@ $usuario = $_SESSION["usuario"];
             }
             .navegador {
                 display: flex;
-                justify-content: end;
+                justify-content: space-between;
             }
             .button{
                 background-color: white;
-                color: rgb(124, 69, 153);
+                color: grey;
                 width: auto;
+                border: none;
+                min-width: 100px;
                 text-transform: uppercase;
                 height: 40px;
-                border: solid 1px rgb(124, 69, 153);
-                border-radius: 10px;
+                /* border: solid 1px rgb(124, 69, 153); */
+                
             }
             .button:hover{
-                background-color: rgb(124, 69, 153);
-                color: white;
+                /* background-color: rgb(124, 69, 153);
+                color: white; */
+                color: rgb(124, 69, 153);
+                border: solid 1px rgb(124, 69, 153);;
             }
             .mr-2{
                 margin-right: 10px;
@@ -366,7 +370,6 @@ $usuario = $_SESSION["usuario"];
 
                         axios.post("funciones/admin.php?accion=getPedidos", formdata)
                         .then(function(response){ 
-                            console.log(response);
                             app.buscandoPedidos = false;
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
@@ -382,8 +385,9 @@ $usuario = $_SESSION["usuario"];
                     getUsuarios() {
                         let formdata = new FormData();
 
-                        axios.post("funciones/acciones.php?accion=getUsuarios", formdata)
+                        axios.post("funciones/admin.php?accion=getUsuarios", formdata)
                         .then(function(response){
+                            console.log(response);
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
                             } else {
