@@ -3,9 +3,11 @@ session_start();
 if (!$_SESSION["login"]) {
     header("Location: index.html");
 }
-
 $rol = $_SESSION["rol"];
 $usuario = $_SESSION["usuario"];
+if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
+    header("Location: home.php");
+}
 
 // if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
 //     header("Location: home.php");
