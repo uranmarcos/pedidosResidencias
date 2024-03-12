@@ -6,6 +6,7 @@ if (!$_SESSION["login"]) {
 }
 $rol = $_SESSION["rol"];
 $usuario = $_SESSION["usuario"];
+$idUsuario = $_SESSION["idUsuario"];
 
 // if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "superAdmin") {
 //     header("Location: home.php");
@@ -68,7 +69,7 @@ $usuario = $_SESSION["usuario"];
                 <!-- START NAVEGADOR -->
                 <div class="col-12 p-0">
                     <div class="navegador">
-                        <select class="form-control selectResidencia" @change="page= 1, getPedidos()" v-model="usuarioBuscado" v-if="rol == 'admin' || rol == 'master'">
+                        <select class="form-control selectResidencia" @change="page= 1, getPedidos(usuarioBuscado)" v-model="usuarioBuscado" v-if="rol == 'admin' || rol == 'master'">
                             <option value="0" >Todos los usuarios</option>
                             <option v-for="usuario in usuarios" v-bind:value="usuario.id" >{{usuario.localidad}}</option>
                         </select>
@@ -193,12 +194,8 @@ $usuario = $_SESSION["usuario"];
                 min-width: 100px;
                 text-transform: uppercase;
                 height: 40px;
-                /* border: solid 1px rgb(124, 69, 153); */
-                
             }
             .button:hover{
-                /* background-color: rgb(124, 69, 153);
-                color: white; */
                 color: rgb(124, 69, 153);
                 border: solid 1px rgb(124, 69, 153);;
             }
@@ -333,14 +330,19 @@ $usuario = $_SESSION["usuario"];
                     usuario: null,
                     usuarioBuscado: null,
                     usuarios: [],
+                    idUsuario: null
                 },
                 mounted () {
                     this.rol = "<?php echo $rol; ?>";
                     this.usuario = "<?php echo $usuario; ?>";
-                    this.getPedidos();
+                    this.idUsuario = "<?php echo $idUsuario; ?>";
+                    // this.idUsuario = 0;
                     if (this.rol != 'residencia') {
                         this.getUsuarios();
+                        this.usuarioBuscado = 0;
+                        this.idUsuario = 0;
                     }
+                    this.getPedidos(this.idUsuario);
                 },
                 beforeUpdate(){
                     window.onscroll = function (){
@@ -364,9 +366,10 @@ $usuario = $_SESSION["usuario"];
                                 break;
                         }
                     },
-                    getPedidos() {
+                    getPedidos(idUsuario) {
                         this.buscandoPedidos = true;
                         let formdata = new FormData();
+                        formdata.append("idUsuario", idUsuario);
 
                         axios.post("funciones/admin.php?accion=getPedidos", formdata)
                         .then(function(response){ 
@@ -385,9 +388,8 @@ $usuario = $_SESSION["usuario"];
                     getUsuarios() {
                         let formdata = new FormData();
 
-                        axios.post("funciones/admin.php?accion=getUsuarios", formdata)
+                        axios.post("funciones/admin.php?accion=getUsuarios")
                         .then(function(response){
-                            console.log(response);
                             if (response.data.error) {
                                 app.mostrarToast("Error", response.data.mensaje);
                             } else {

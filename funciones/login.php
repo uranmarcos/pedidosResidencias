@@ -39,6 +39,7 @@
                         $_SESSION["localidad"] = $u[0]["localidad"];
                         $_SESSION["usuario"] = $u[0]["usuario"];
                         $_SESSION["rol"] = $u[0]["rol"];
+                        $_SESSION["idUsuario"] = $u[0]["id"];
                     } else {
                         // Contraseña incorrecta
                         $res["mensaje"] = "Datos Incorrectos";

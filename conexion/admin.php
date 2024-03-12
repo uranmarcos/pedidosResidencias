@@ -36,9 +36,13 @@ class ApptivaDB {
         }
     }
 
-    public function getPedidos() {
+    public function getPedidos($idUsuario) {
         try {
-            $resultado = $this->conexion->query("SELECT * FROM pedidos") or die();
+            if ($idUsuario == 0) {
+                $resultado = $this->conexion->query("SELECT * FROM pedidos") or die();
+            } else {
+                $resultado = $this->conexion->query("SELECT * FROM pedidos WHERE idUsuario = '$idUsuario'") or die();
+            }
 
             return $resultado->fetch_all(MYSQLI_ASSOC);
         } catch (\Throwable $th) {

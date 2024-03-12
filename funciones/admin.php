@@ -71,7 +71,9 @@
         break;   
 
         case 'getPedidos':
-            $u = $user -> getPedidos();
+            $idUsuario = $_POST['idUsuario'];
+            
+            $u = $user -> getPedidos($idUsuario);
 
             if ($u || $u == []) { 
                 $res["pedidos"] = $u;
