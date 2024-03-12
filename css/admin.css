@@ -120,9 +120,18 @@ tr{
 }
 .btnEditar{
     color: purple;
+    width:40px;
 }
-.btnEditar:hover{
+.pointer:hover{
     cursor: pointer;
+}
+.btnEliminar{
+    width:40px !important;
+    color: rgb(238, 100, 100);
+}
+.btnReset{
+    width:40px !important;
+    color: rgb(59, 148, 64);
 }
 .spanUsuario{
     font-size: 12px;

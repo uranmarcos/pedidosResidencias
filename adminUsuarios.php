@@ -123,10 +123,20 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                                             <td>{{dato.usuario}}</td>
                                             <td>{{dato.rol}}</td>
                                             <td>{{dato.casas == 0 ? '-' : dato.casas}}</td>
-                                            <td>
-                                                <span @click="editar(dato)" class="btnEditar">
+                                            <td style="width: 120px">
+                                                <span @click="cargarEnModal(dato, 'editar')" class="pointer btnEditar">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                                         <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                                                    </svg>
+                                                </span>
+                                                <span @click="cargarEnModal(dato, 'eliminar')" class="pointer btnEliminar" v-if="rol == 'master'">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eraser-fill" viewBox="0 0 16 16">
+                                                        <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/>
+                                                    </svg>
+                                                </span>
+                                                <span @click="resetPassword(dato)" class="pointer btnReset">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
+                                                        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
                                                     </svg>
                                                 </span>
                                             </td>
@@ -474,6 +484,24 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                                     app.mostrarToast("Error", "No se pudo editar el usuario");
                                 })
                             }
+                            if (this.accion == 'eliminar') {
+                                formdata.append("id", app.usuario.id);
+                                axios.post("funciones/admin.php?accion=eliminarUsuario", formdata)
+                                .then(function(response){
+                                    if (response.data.error) {
+                                        app.mostrarToast("Error", response.data.mensaje);
+                                    } else {
+                                    app.mostrarToast("Éxito", response.data.mensaje);
+                                    app.modal = false;
+                                    app.resetUsuario();
+                                    app.getDatos();
+                                }
+                                app.confirmando = false;
+                                }).catch( error => {
+                                    app.confirmando = false;
+                                    app.mostrarToast("Error", "No se pudo editar el usuario");
+                                })
+                            }
                         }
                     },
                     resetUsuario () {
@@ -541,9 +569,9 @@ if ($_SESSION["rol"] != "admin" && $_SESSION["rol"] != "master") {
                         this.modal = true;
                         this.accion = accion;
                     },
-                    editar (dato) {
+                    cargarEnModal (dato, accion) {
                         this.modal = true;
-                        this.accion = 'editar';
+                        this.accion = accion;
                         this.usuario.id = dato.id;
                         this.usuario.provincia = dato.residencia.split(' - ')[0];
                         this.usuario.localidad = dato.residencia.split(' - ')[1];

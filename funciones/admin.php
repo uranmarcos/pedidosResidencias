@@ -70,6 +70,22 @@
 
         break;   
 
+        case 'eliminarUsuario':
+            $id = $_POST['id'];
+                     
+            $u = $user -> eliminarUsuario($id);
+        
+            if ($u || $u == true) {
+                $res["error"] = false;
+                $res["mensaje"] = "El usuario se eliminó correctamente";
+            } else {
+                $res["mensaje"] = "No se pudo eliminar el usuario. Intente nuevamente";
+                $res["error"] = true;
+            }
+            // $res["mensaje"] = $id;
+
+        break;   
+
         case 'getPedidos':
             $idUsuario = $_POST['idUsuario'];
             

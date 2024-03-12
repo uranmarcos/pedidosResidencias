@@ -39,9 +39,9 @@ class ApptivaDB {
     public function getPedidos($idUsuario) {
         try {
             if ($idUsuario == 0) {
-                $resultado = $this->conexion->query("SELECT * FROM pedidos") or die();
+                $resultado = $this->conexion->query("SELECT * FROM pedidos ORDER BY fecha DESC") or die();
             } else {
-                $resultado = $this->conexion->query("SELECT * FROM pedidos WHERE idUsuario = '$idUsuario'") or die();
+                $resultado = $this->conexion->query("SELECT * FROM pedidos WHERE idUsuario = '$idUsuario' ORDER BY fecha DESC") or die();
             }
 
             return $resultado->fetch_all(MYSQLI_ASSOC);
@@ -76,6 +76,22 @@ class ApptivaDB {
         try {
             $stmt = $this->conexion->prepare("UPDATE usuarios SET provincia = ?, localidad = ?, usuario = ?, pass = ?, rol = ?, casas = ? WHERE id = ?");
             $stmt->bind_param("ssssssi", $provincia, $localidad, $usuario, $pass, $rol, $casas, $id);
+            if (!$stmt->execute()) {
+                return false;
+                // Manejo de errores
+                die("Error al ejecutar la actualización: " . $stmt->error);
+            }
+            return true;
+        } catch (\Throwable $th) {
+            // return $th;
+            return false;
+        }
+    }
+
+    public function eliminarUsuario($id) {
+        try {
+            $stmt = $this->conexion->prepare("DELETE FROM usuarios WHERE id = ?");
+            $stmt->bind_param("i", $id);
             if (!$stmt->execute()) {
                 return false;
                 // Manejo de errores
